@@ -5,22 +5,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>スタジオ猫 - 自己紹介</title>
     <style>
-        body { font-family: sans-serif; background-color: #f3effa; color: #3b3543; margin: 0; padding: 0; }
-        .container { max-width: 800px; margin: 30px auto; padding: 30px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(142, 124, 171, 0.1); }
-        header { text-align: center; border-bottom: 2px solid #b3a2cb; padding-bottom: 20px; margin-bottom: 30px; }
+        /* 全体のデザイン設定（薄紫と白が基調） */
+        body { 
+            font-family: sans-serif; 
+            background-color: #f3effa; 
+            color: #3b3543; 
+            margin: 0; 
+            padding: 0; 
+            position: relative;
+            overflow-x: hidden; /* 猫が画面外にはみ出た時の横スクロールを防止 */
+            min-height: 100vh;
+        }
+        .container { 
+            max-width: 800px; 
+            margin: 30px auto 80px auto; /* 下部に猫が歩くスペースを空ける */
+            padding: 30px; 
+            background: #ffffff; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(142, 124, 171, 0.1); 
+            position: relative;
+            z-index: 2; /* 文字が猫より手前に来るように設定 */
+        }
+        
+        /* ヘッダーと猫耳アニメーション */
+        header { 
+            text-align: center; 
+            border-bottom: 2px solid #b3a2cb; 
+            padding-bottom: 20px; 
+            margin-bottom: 30px; 
+            position: relative;
+        }
+        /* タイトルの上に猫耳を錬成 */
+        header::before {
+            content: "🐱";
+            font-size: 30px;
+            display: block;
+            margin-bottom: -5px;
+            animation: earWiggle 3s infinite ease-in-out;
+            transform-origin: center bottom;
+        }
         h1 { margin: 0; font-size: 28px; letter-spacing: 0.08em; color: #6c528d; }
         .subtitle { font-size: 14px; color: #8e7cab; margin: 5px 0 0 0; }
-        h2 { font-size: 18px; border-left: 4px solid #9d81ba; padding-left: 10px; margin-top: 40px; color: #513971; }
+        
+        /* 見出しと足跡スタンプ */
+        h2 { 
+            font-size: 18px; 
+            border-left: 4px solid #9d81ba; 
+            padding-left: 10px; 
+            margin-top: 40px; 
+            color: #513971; 
+            position: relative;
+        }
+        /* 見出しの右側にうっすら足跡スタンプ */
+        h2::after {
+            content: "🐾";
+            position: absolute;
+            right: 10px;
+            color: rgba(157, 129, 186, 0.15);
+            font-size: 24px;
+            transform: rotate(15deg);
+        }
+
+        /* テーブルの設定 */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { border: 1px solid #e1daf0; padding: 12px; text-align: left; font-size: 14px; }
         th { background-color: #fbf9fe; color: #513971; width: 30%; }
+        
+        /* 他のページに飛ぶナビゲーションメニュー */
         nav { text-align: center; margin-bottom: 20px; }
-        nav a { margin: 0 10px; color: #8261ad; text-decoration: none; font-size: 14px; font-weight: bold; }
+        nav a { margin: 0 8px; color: #8261ad; text-decoration: none; font-size: 14px; font-weight: bold; }
         nav a:hover { text-decoration: underline; }
         nav a.active { color: #4a148c; border-bottom: 2px solid #4a148c; padding-bottom: 2px; }
+
+        /* ─── アニメーションの設定 ─── */
+
+        /* 1. 猫耳ピコピコアニメーション */
+        @keyframes earWiggle {
+            0%, 90%, 100% { transform: rotate(0deg) scale(1); }
+            93% { transform: rotate(-10deg) scale(1.05); }
+            96% { transform: rotate(10deg) scale(1.05); }
+        }
+
+        /* 2. 最下部をトコトコ歩く猫 */
+        .walking-cat {
+            position: fixed;
+            bottom: 10px;
+            left: -50px; /* 画面の左外側からスタート */
+            font-size: 32px;
+            line-height: 1;
+            z-index: 1; /* 白いコンテナの裏を歩かせる */
+            pointer-events: none; /* マウスの邪魔をしない設定 */
+            animation: catWalk 20s infinite linear;
+        }
+
+        @keyframes catWalk {
+            0% { left: -50px; transform: scaleX(1); } /* 右を向いて進む */
+            45% { left: 100vw; transform: scaleX(1); } /* 画面右端へ消える */
+            46% { transform: scaleX(-1); } /* 左を向く */
+            50% { left: 100vw; transform: scaleX(-1); } /* 待機 */
+            55% { left: 100vw; transform: scaleX(-1); } /* 左に進み始める */
+            95% { left: -50px; transform: scaleX(-1); } /* 画面左端へ消える */
+            96% { transform: scaleX(1); } /* 右を向く */
+            100% { left: -50px; transform: scaleX(1); } /* ループ */
+        }
     </style>
 </head>
 <body>
+
 <div class="container">
     <header>
         <h1>スタジオ猫</h1>
@@ -28,23 +119,67 @@
         <p style="font-size: 14px; margin-top: 10px;">連絡先：Twitter(X) @xxxx / Discord: xxxx</p>
     </header>
 
-<nav>
-        <a href="index.html">自己紹介</a> | 
+    <!-- 他のページに飛ぶメニューボタン -->
+    <nav>
+        <a href="index.html" class="active">自己紹介</a> | 
         <a href="rules.html">ハウスルール</a> | 
         <a href="scenarios.html">通過シナリオ</a> | 
         <a href="owned-scenarios.html">回せるシナリオ</a> | 
         <a href="dice.html">Webダイス</a>
-</nav>
+    </nav>
 
-    <section>
+    <!-- 自己紹介セクション（まとめた内容） -->
+    <section id="profile">
         <h2>自己紹介</h2>
-        <p>「スタジオ猫」へようこそ。成人済みのTRPGプレイヤーです。ストーリー重視のシナリオや、じっくり話し合うロールプレイが好きです。</p>
+        <p>スタジオ猫へようこそ。<br>
+        普段は『クトゥルフ神話TRPG』の怪奇的・狂気的な世界観に魅了され、地道にセッションを重ねています。<br>
+        探索者が理不尽な恐怖に立ち向かい、知恵を絞って生き残ろうとするドロドロした泥臭いセッションや、ダイスの女神様に翻弄される出目芸的な展開が特に好きです。<br>
+        普段はDiscordとココフォリアを使用したボイスセッションがメインです。お気軽に絡んでいただけると嬉しいです！</p>
+        
         <table>
-            <tr><th>活動時間帯</th><td>平日 21:00〜24:00 / 休日 柔軟に対応可能</td></tr>
-            <tr><th>プレイスタイル</th><td>ボイセ、半テキ中心（Discord + ココフォリア）</td></tr>
-            <tr><th>所持ルルブ</th><td>クトゥルフ神話TRPG（6版・7版）、エモクロア、インセイン</td></tr>
+            <tr>
+                <th>活動時間帯</th>
+                <td>
+                    <strong>平日：</strong> 19:00 〜 26:00<br>
+                    <strong>土日祝：</strong> 9:00 〜 26:00（日程調整に合わせて柔軟に対応可能です）
+                </td>
+            </tr>
+            <tr>
+                <th>セッション環境</th>
+                <td>Discord（ボイス） ＋ ココフォリア、いあきゃら</td>
+            </tr>
+            <tr>
+                <th>プレイヤー傾向</th>
+                <td>
+                    ・ダイスに一喜一憂するスリリングな展開が好き<br>
+                    ・キャラがしたいことを考えてRPするのが好き<br>
+                    ・秘匿HO物、長編シティ、クラシックなクローズドまで何でも好物<br>
+                    ・<strong>特に魔女シナリオが好き</strong>
+                </td>
+            </tr>
+            <tr>
+                <th>所持ルールブック</th>
+                <td>
+                    クトゥルフ神話TRPG（6版・7版）、比叡山炎上、クトゥルフ神話TRPG公式アプリ（プレミアムプラン）
+                </td>
+            </tr>
+            <tr>
+                <th>地雷・苦手傾向</th>
+                <td>
+                    <strong>【苦手】</strong><br>
+                    ・ご都合主義による性転換（謎の薬や神話生物の気まぐれによるもの等）<br>
+                    <br>
+                    <strong>【大丈夫・好物】</strong><br>
+                    ・男性妊娠, 現実世界における現実的な性転換は問題ありません。<br>
+                    ・それ以外のグロ、胸糞、理不尽、ロスト率高め等はすべて美味しくいただけます。
+                </td>
+            </tr>
         </table>
     </section>
 </div>
+
+<!-- 画面を歩き回る猫の要素 -->
+<div class="walking-cat">🐈</div>
+
 </body>
 </html>
