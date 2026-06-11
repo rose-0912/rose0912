@@ -5,24 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>スタジオ猫 - Webダイス</title>
     <style>
-        body { font-family: sans-serif; background-color: #f3effa; color: #3b3543; margin: 0; padding: 0; }
-        .container { max-width: 800px; margin: 30px auto; padding: 30px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(142, 124, 171, 0.1); }
-        header { text-align: center; border-bottom: 2px solid #b3a2cb; padding-bottom: 20px; margin-bottom: 30px; }
+        /* 全体のデザイン設定（ハウスルールページと完全統一） */
+        body { 
+            font-family: sans-serif; 
+            background-color: #f3effa; 
+            color: #3b3543; 
+            margin: 0; 
+            padding: 0; 
+            position: relative;
+            overflow-x: hidden; 
+            min-height: 100vh;
+        }
+        .container { 
+            max-width: 800px; 
+            margin: 30px auto 250px auto; /* 超巨大猫用の下部余白 */
+            padding: 30px; 
+            background: #ffffff; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(142, 124, 171, 0.1); 
+            position: relative;
+            z-index: 2; 
+        }
+        
+        /* ヘッダーと猫APNG */
+        header { 
+            text-align: center; 
+            border-bottom: 2px solid #b3a2cb; 
+            padding-bottom: 20px; 
+            margin-bottom: 30px; 
+            position: relative;
+        }
+        .header-cat {
+            display: block;
+            width: 45px;
+            height: 45px;
+            margin: 0 auto 5px auto;
+            object-fit: contain;
+        }
         h1 { margin: 0; font-size: 28px; letter-spacing: 0.08em; color: #6c528d; }
         .subtitle { font-size: 14px; color: #8e7cab; margin: 5px 0 0 0; }
-        h2 { font-size: 18px; border-left: 4px solid #9d81ba; padding-left: 10px; margin-top: 40px; color: #513971; }
+        
+        /* ナビゲーションメニュー */
         nav { text-align: center; margin-bottom: 20px; }
-        nav a { margin: 0 10px; color: #8261ad; text-decoration: none; font-size: 14px; font-weight: bold; }
+        nav a { margin: 0 8px; color: #8261ad; text-decoration: none; font-size: 14px; font-weight: bold; }
         nav a:hover { text-decoration: underline; }
         nav a.active { color: #4a148c; border-bottom: 2px solid #4a148c; padding-bottom: 2px; }
 
+        /* 見出しと【「ハ」の真裏に配置した巨大肉球スタンプ】 */
+        h2 { 
+            font-size: 20px; 
+            border-left: 5px solid #9d81ba; 
+            padding-left: 12px; 
+            margin-top: 40px; 
+            margin-bottom: 20px;
+            color: #513971; 
+            position: relative;
+            z-index: 1; 
+        }
+        h2::after {
+            content: "🐾";
+            position: absolute;
+            left: -22px;     
+            top: -55px;      
+            color: rgba(157, 129, 186, 0.12); 
+            font-size: 80px; 
+            transform: rotate(-15deg); 
+            pointer-events: none;
+            z-index: -1;     
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.8;
+            margin: 15px 0;
+        }
+
         /* ダイス機能のスタイル */
-        .dice-panel { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; background: #f3e5f5; padding: 20px; border-radius: 6px; margin-top: 15px; margin-bottom: 20px; justify-content: center; }
-        .dice-select-group { display: flex; align-items: center; gap: 8px; font-weight: bold; color: #4a148c; }
+        .dice-panel { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 15px; 
+            align-items: center; 
+            background: #f8f6fc; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-top: 15px; 
+            margin-bottom: 20px; 
+            justify-content: center; 
+            border: 1px solid #ebdff5;
+        }
+        .dice-select-group { display: flex; align-items: center; gap: 8px; font-weight: bold; color: #4a148c; font-size: 15px; }
         .dice-select-group select { padding: 6px 12px; border-radius: 4px; border: 1px solid #b39ddb; font-size: 1rem; background: #fff; color: #4a148c; cursor: pointer; }
         .dice-btn { background: linear-gradient(135deg, #7b1fa2 0%, #4a148c 100%); color: white; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: transform 0.1s, opacity 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .dice-btn:hover { opacity: 0.9; }
         .dice-btn:active { transform: scale(0.95); }
+        
         .dice-result-container { min-height: 80px; background: #fafafa; border: 2px dashed #b39ddb; border-radius: 6px; padding: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 20px; }
         .dice-list { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; justify-content: center; }
         
@@ -44,34 +121,78 @@
         }
         .total-score { font-size: 1.3rem; font-weight: bold; color: #4a148c; }
         .placeholder-text { color: #888; font-style: italic; }
+
+        /* 新設：永久集計カウンターエリアのスタイル */
+        .counter-panel {
+            background: #fbf9fe;
+            border: 1px solid #ebdff5;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .counter-title { font-size: 15px; font-weight: bold; color: #513971; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; gap: 5px; }
+        .counter-box-container { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; }
+        .counter-box { background: #fff; border: 1px solid #e1daf0; padding: 12px 20px; border-radius: 6px; box-shadow: 0 2px 6px rgba(142,124,171,0.05); min-width: 140px; }
+        .counter-label { font-size: 12px; font-weight: bold; color: #666; margin-bottom: 6px; }
+        .counter-value { font-size: 24px; font-weight: bold; margin-bottom: 8px; }
+        .crit-color { color: #1565c0; }
+        .fumb-color { color: #c2185b; }
+        .total-color { color: #4a148c; }
+        .counter-control-btn { background: #f3effa; border: 1px solid #b3a2cb; color: #513971; font-weight: bold; border-radius: 4px; padding: 2px 10px; cursor: pointer; font-size: 14px; margin: 0 3px; transition: background 0.2s; }
+        .counter-control-btn:hover { background: #e1daf0; }
+        .counter-reset-container { margin-top: 15px; text-align: right; }
+        .reset-link { color: #888; font-size: 12px; text-decoration: underline; cursor: pointer; background: none; border: none; }
+        .reset-link:hover { color: #c2185b; }
         
         /* 履歴（ログ）用のスタイル */
         .dice-log-container { border-top: 1px dashed #c8b9dd; padding-top: 15px; text-align: left; max-width: 450px; margin: 0 auto; }
         .log-title { font-size: 13px; font-weight: bold; color: #6c528d; margin-bottom: 5px; }
         .log-list { list-style: none; padding: 0; margin: 0; font-size: 14px; }
+        .log-list strong { background: none; padding: 0; font-weight: bold; }
         .log-item { padding: 6px 0; border-bottom: 1px solid #f0eaf8; color: #666; display: flex; justify-content: space-between; align-items: center; }
         .log-item:first-child { font-weight: bold; color: #333; }
         
-        /* ログ内の特別なテキスト用カラー */
         .log-has-special { font-weight: bold; color: #4a148c; }
         .log-crit-text { color: #1565c0; font-weight: bold; }
         .log-fumb-text { color: #c2185b; font-weight: bold; }
+
+        /* アニメーションの設定（歩くメガ猫を完全移植） */
+        .walking-cat {
+            position: fixed;
+            bottom: -50px; 
+            left: -550px; 
+            width: 500px; 
+            height: 500px;
+            z-index: 1; 
+            pointer-events: none; 
+            transform: scaleX(-1); 
+            animation: catWalkMega 40s infinite linear;
+            object-fit: contain;
+        }
+        @keyframes catWalkMega {
+            0% { left: -550px; }
+            85% { left: 100vw; }
+            100% { left: 100vw; }
+        }
     </style>
 </head>
 <body>
+
 <div class="container">
     <header>
+        <img src="cat.png" alt="猫" class="header-cat">
         <h1>スタジオ猫</h1>
         <p class="subtitle">TRPG Profile & Tools</p>
     </header>
 
-<nav>
+    <nav>
         <a href="index.html">自己紹介</a> | 
         <a href="rules.html">ハウスルール</a> | 
         <a href="scenarios.html">通過シナリオ</a> | 
         <a href="owned-scenarios.html">回せるシナリオ</a> | 
-        <a href="dice.html">Webダイス</a>
-</nav>
+        <a href="dice.html" class="active">Webダイス</a>
+    </nav>
 
     <section>
         <h2>Webダイス</h2>
@@ -105,6 +226,34 @@
             <div class="total-score" id="dice-total"></div>
         </div>
 
+        <!-- 新設：永久保存型・通算クリファン集計カウンター -->
+        <div class="counter-panel">
+            <div class="counter-title">📊 卓の通算ダイス集計カウンター (ブラウザを閉じても保存)</div>
+            <div class="counter-box-container">
+                <div class="counter-box">
+                    <div class="counter-label">決定的成功 (C)</div>
+                    <div class="counter-value crit-color" id="total-crit-val">0</div>
+                    <button class="counter-control-btn" onclick="adjustCounter('crit', -1)">-</button>
+                    <button class="counter-control-btn" onclick="adjustCounter('crit', 1)">+</button>
+                </div>
+                <div class="counter-box">
+                    <div class="counter-label">致命的失敗 (F)</div>
+                    <div class="counter-value fumb-color" id="total-fumb-val">0</div>
+                    <button class="counter-control-btn" onclick="adjustCounter('fumb', -1)">-</button>
+                    <button class="counter-control-btn" onclick="adjustCounter('fumb', 1)">+</button>
+                </div>
+                <div class="counter-box">
+                    <div class="counter-label">総ダイスロール数</div>
+                    <div class="counter-value total-color" id="total-rolls-val">0</div>
+                    <button class="counter-control-btn" onclick="adjustCounter('rolls', -1)">-</button>
+                    <button class="counter-control-btn" onclick="adjustCounter('rolls', 1)">+</button>
+                </div>
+            </div>
+            <div class="counter-reset-container">
+                <button class="reset-link" onclick="resetCounter()">➔ カウンターの数字をすべてリセットする</button>
+            </div>
+        </div>
+
         <div class="dice-log-container">
             <div class="log-title">🎲 履歴 (最大5件)</div>
             <ul class="log-list" id="dice-log">
@@ -114,8 +263,43 @@
     </section>
 </div>
 
+<img src="cat.png" alt="歩く猫" class="walking-cat">
+
 <script>
     let diceLogs = [];
+
+    // ローカルストレージ（ブラウザ永久保存）からデータを読み込む関数
+    function loadSavedCounters() {
+        document.getElementById('total-crit-val').innerText = localStorage.getItem('cat_total_crit') || 0;
+        document.getElementById('total-fumb-val').innerText = localStorage.getItem('cat_total_fumb') || 0;
+        document.getElementById('total-rolls-val').innerText = localStorage.getItem('cat_total_rolls') || 0;
+    }
+
+    // カウンターの数値を直接手動で増減させる関数（他PLの集計用）
+    function adjustCounter(type, amount) {
+        let key = '';
+        let elementId = '';
+        if (type === 'crit') { key = 'cat_total_crit'; elementId = 'total-crit-val'; }
+        else if (type === 'fumb') { key = 'cat_total_fumb'; elementId = 'total-fumb-val'; }
+        else if (type === 'rolls') { key = 'cat_total_rolls'; elementId = 'total-rolls-val'; }
+
+        let currentVal = parseInt(localStorage.getItem(key) || 0, 10);
+        let newVal = currentVal + amount;
+        if (newVal < 0) newVal = 0; // マイナスにはならないようにガード
+
+        localStorage.setItem(key, newVal);
+        document.getElementById(elementId).innerText = newVal;
+    }
+
+    // すべてのリセット関数
+    function resetCounter() {
+        if (confirm('通算カウンターの数字をすべて「0」に戻してもよろしいですか？')) {
+            localStorage.setItem('cat_total_crit', 0);
+            localStorage.setItem('cat_total_fumb', 0);
+            localStorage.setItem('cat_total_rolls', 0);
+            loadSavedCounters();
+        }
+    }
 
     function rollDice(sides) {
         const countSelect = document.getElementById('dice-count');
@@ -139,15 +323,24 @@
             }
         }
 
+        // 永久集計データの更新（自動連動システム）
+        let savedCrits = parseInt(localStorage.getItem('cat_total_crit') || 0, 10) + critCount;
+        let savedFumbs = parseInt(localStorage.getItem('cat_total_fumb') || 0, 10) + fumbCount;
+        let savedRolls = parseInt(localStorage.getItem('cat_total_rolls') || 0, 10) + 1; // 1回振るボタンを押した数
+
+        localStorage.setItem('cat_total_crit', savedCrits);
+        localStorage.setItem('cat_total_fumb', savedFumbs);
+        localStorage.setItem('cat_total_rolls', savedRolls);
+        loadSavedCounters(); // 画面の数値をリフレッシュ
+
         // ② サイコロ画面の生成
         const cubesDiv = document.getElementById('dice-cubes');
-        cubesDiv.innerHTML = ''; // クリア
+        cubesDiv.innerHTML = ''; 
 
         results.forEach(roll => {
             const diceEl = document.createElement('div');
             const textStyleClass = roll >= 100 ? 'small-text' : '';
             
-            // 個別判定用のクラスを適用
             let individualClass = '';
             if (sides === 100) {
                 if (roll >= 1 && roll <= 5) individualClass = 'dice-critical';
@@ -161,7 +354,6 @@
 
         // ③ 合計値の表示
         const totalDiv = document.getElementById('dice-total');
-        // 1D100を複数振って特殊な出目がある場合、合計値エリアにも少し通知を出す
         let totalAlert = '';
         if (sides === 100 && (critCount > 0 || fumbCount > 0)) {
             totalAlert = ` <span style="font-size:0.9rem; margin-left:5px;">(C:${critCount} / F:${fumbCount})</span>`;
@@ -173,7 +365,7 @@
         let logItemClass = '';
         if (sides === 100) {
             if (critCount > 0 || fumbCount > 0) {
-                logItemClass = 'log-has-special'; // 特殊な出目があったログ全体を少し太字に
+                logItemClass = 'log-has-special'; 
                 
                 let labels = [];
                 if (critCount > 0) labels.push(`<span class="log-crit-text">【クリティカルx${critCount}】</span>`);
@@ -213,6 +405,9 @@
         if (isNaN(sides) || sides < 2) { alert('2以上の数字を入力してください。'); return; }
         rollDice(sides);
     }
+
+    // ページを起動した瞬間に保存されたカウンターデータを読み込む
+    window.onload = loadSavedCounters;
 </script>
 </body>
 </html>
