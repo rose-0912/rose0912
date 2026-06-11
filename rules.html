@@ -5,43 +5,339 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>スタジオ猫 - ハウスルール</title>
     <style>
-        body { font-family: sans-serif; background-color: #f3effa; color: #3b3543; margin: 0; padding: 0; }
-        .container { max-width: 800px; margin: 30px auto; padding: 30px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(142, 124, 171, 0.1); }
-        header { text-align: center; border-bottom: 2px solid #b3a2cb; padding-bottom: 20px; margin-bottom: 30px; }
+        /* 全体のデザイン設定（薄紫と白が基調） */
+        body { 
+            font-family: sans-serif; 
+            background-color: #f3effa; 
+            color: #3b3543; 
+            margin: 0; 
+            padding: 0; 
+            position: relative;
+            overflow-x: hidden; 
+            min-height: 100vh;
+        }
+        .container { 
+            max-width: 800px; 
+            margin: 30px auto 250px auto; /* 超巨大猫用の下部余白 */
+            padding: 30px; 
+            background: #ffffff; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(142, 124, 171, 0.1); 
+            position: relative;
+            z-index: 2; 
+        }
+        
+        /* ヘッダーと猫APNG */
+        header { 
+            text-align: center; 
+            border-bottom: 2px solid #b3a2cb; 
+            padding-bottom: 20px; 
+            margin-bottom: 30px; 
+            position: relative;
+        }
+        .header-cat {
+            display: block;
+            width: 45px;
+            height: 45px;
+            margin: 0 auto 5px auto;
+            object-fit: contain;
+        }
         h1 { margin: 0; font-size: 28px; letter-spacing: 0.08em; color: #6c528d; }
         .subtitle { font-size: 14px; color: #8e7cab; margin: 5px 0 0 0; }
-        h2 { font-size: 18px; border-left: 4px solid #9d81ba; padding-left: 10px; margin-top: 40px; color: #513971; }
-        ul { padding-left: 20px; }
-        li { margin-bottom: 8px; }
+        
+        /* 見出しと【「ハ」の真裏に配置した巨大肉球スタンプ】 */
+        h2 { 
+            font-size: 18px; 
+            border-left: 4px solid #9d81ba; 
+            padding-left: 10px; 
+            margin-top: 40px; 
+            color: #513971; 
+            position: relative;
+            z-index: 1; 
+        }
+        h3 {
+            font-size: 15px;
+            color: #6c528d;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed #b3a2cb;
+            padding-bottom: 5px;
+        }
+        h2::after {
+            content: "🐾";
+            position: absolute;
+            left: -22px;     
+            top: -55px;      
+            color: rgba(157, 129, 186, 0.12); 
+            font-size: 80px; 
+            transform: rotate(-15deg); 
+            pointer-events: none;
+            z-index: -1;     
+        }
+
+        /* 箇条書き・テーブル・引用装飾 */
+        ul { padding-left: 20px; margin: 10px 0; }
+        li { margin-bottom: 8px; font-size: 14px; line-height: 1.6; }
+        li strong, p strong { color: #513971; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 20px; }
+        th, td { border: 1px solid #e1daf0; padding: 10px; text-align: left; font-size: 13px; line-height: 1.5; }
+        th { background-color: #fbf9fe; color: #513971; font-weight: bold; }
+        
+        /* 戦闘クリファン表専用のスタイル */
+        .battle-table th { background-color: #f3e5f5; text-align: center; }
+        .battle-table td { vertical-align: top; }
+        .crit-row { background-color: #f0f7ff; font-weight: bold; color: #1565c0; text-align: center; }
+        .fumb-row { background-color: #fff5f5; font-weight: bold; color: #c2185b; text-align: center; }
+
+        /* ナビゲーションメニュー */
         nav { text-align: center; margin-bottom: 20px; }
-        nav a { margin: 0 10px; color: #8261ad; text-decoration: none; font-size: 14px; font-weight: bold; }
+        nav a { margin: 0 8px; color: #8261ad; text-decoration: none; font-size: 14px; font-weight: bold; }
         nav a:hover { text-decoration: underline; }
         nav a.active { color: #4a148c; border-bottom: 2px solid #4a148c; padding-bottom: 2px; }
+
+        /* バッジ */
+        .badge { display: inline-block; padding: 2px 6px; font-size: 11px; font-weight: bold; border-radius: 4px; color: white; margin-right: 5px; }
+        .bg-tag { background-color: #9d81ba; }
+        .bg-alert { background-color: #c2185b; }
+
+        /* 折りたたみ（狂気表など） */
+        details { background: #fbf9fe; padding: 12px; border-radius: 6px; border: 1px solid #e1daf0; margin-bottom: 15px; }
+        summary { font-size: 14px; font-weight: bold; color: #513971; cursor: pointer; outline: none; }
+        summary:hover { color: #8261ad; }
+
+        /* アニメーションの設定 */
+        .walking-cat {
+            position: fixed;
+            bottom: -50px; 
+            left: -550px; 
+            width: 500px; 
+            height: 500px;
+            z-index: 1; 
+            pointer-events: none; 
+            transform: scaleX(-1); 
+            animation: catWalkMega 40s infinite linear;
+            object-fit: contain;
+        }
+        @keyframes catWalkMega {
+            0% { left: -550px; }
+            85% { left: 100vw; }
+            100% { left: 100vw; }
+        }
     </style>
 </head>
 <body>
+
 <div class="container">
     <header>
+        <img src="cat.png" alt="猫" class="header-cat">
         <h1>スタジオ猫</h1>
         <p class="subtitle">TRPG Profile & Tools</p>
     </header>
 
-<nav>
+    <nav>
         <a href="index.html">自己紹介</a> | 
-        <a href="rules.html">ハウスルール</a> | 
+        <a href="rules.html" class="active">ハウスルール</a> | 
         <a href="scenarios.html">通過シナリオ</a> | 
         <a href="owned-scenarios.html">回せるシナリオ</a> | 
         <a href="dice.html">Webダイス</a>
     </nav>
 
-    <section>
-        <h2>ハウスルール（CoC6版基準）</h2>
+    <section id="base-rules">
+        <h2>ハウスルール</h2>
+        
+        <h3>基本ルール・チケット制</h3>
         <ul>
-            <li><strong>クリティカル・ファンブル：</strong> 1〜5をクリティカル、96〜100をファンブルとします。</li>
-            <li><strong>スペシャル：</strong> 戦闘時のみ適応（回避・受け流し困難化）。</li>
-            <li><strong>狂気の発症：</strong> 一時的狂気はアイデアなし、精神分析で即時解除可能です。</li>
+            <li><strong>秘匿シナリオ時：</strong> 他の方のCSはネタバレを含む可能性がありますので見ないようお願いします。</li>
+            <li><span class="badge bg-alert">CFチケット</span> KPがどうしても処理に困ったり、ここでCFが起こると困る！という時に使用します。</li>
+            <li><span class="badge bg-tag">Cチケット</span> 基本的にSANC（正気度ロール）、シナリオで回数が明記されている場合以外のダイスの振り直しを可能とします。</li>
+            <li><span class="badge bg-tag">Fチケット</span> 基本的にシナリオ終了後【枚数×1d3】のSANが消失します（悪いことを溜め込んだ為です）。</li>
+            <li><strong>総裁ルール：</strong> 総裁にはCチケットかC（クリティカル）を差し出す必要があります。</li>
+        </ul>
+
+        <h3>日程について（KP依頼時）</h3>
+        <p style="font-size: 14px; padding-left: 5px;">
+            私にKP依頼をする場合は、<strong>PL全員がいるチャンネルで何時間必要かを書き出す</strong>ので、それを踏まえてPL間で日程候補を出してください。<br>
+            そこから調整して選ぶため、<strong>KPが必要とする時間 ＋ 10時間程度</strong>は日程を多めに書き出してくださると助かります。<br>
+            全員卓修羅でスケジュール確保が厳しい場合は、何月ごろに日程をそろえるかの方針だけまずはご連絡ください。
+        </p>
+
+        <h3>CS（キャラクターシート）作成について</h3>
+        <ul>
+            <li><strong>技能上限：</strong> 基本的に <strong>90</strong> まで。</li>
+            <li><strong>回避の上限：</strong> 《DEX * 5》の値までを上限とします。</li>
+            <li><strong>ステータス：</strong> 全体振り直しの回数制限はありません。ただし、個別箇所の振り直しは不可。</li>
+            <li><strong>ステータスの解釈：</strong> 理由によっては理由振りを可とします。</li>
+            <li><strong>持ち物：</strong> KPからの事前確認は取りませんが、CSに書いてあるもの以外は「ドンキに売っているか」または《幸運》判定が必要です。</li>
+            <li><strong>探索者の年齢：</strong> 《EDU ＋ 6》を最低値としていますが、デメリットありであればEDUの下限ルールを適用していなくても（若くても）いいとします。</li>
+            <li><strong>特徴表：</strong> シナリオ進行上問題がなく、KPが事前に「特徴表の使用OKです」と明言していた場合のみ可能（最大2つまで）。</li>
+            <li><strong>継続探索者：</strong> シナリオの内容によって許可します。魔術的道具等は基本的にシナリオに持っていけないため、家に厳重保管している扱い（シナリオ内使用不可）となります。</li>
+        </ul>
+
+        <h3>持ち物ルール（救急キット・武器）</h3>
+        <ul>
+            <li><strong>応急キット：</strong> 持ち込み時は、シナリオ前に以下の2つの効果から任意のものを選択できます。<br>
+                ➔ ① 応急手当技能に ＋30 の補正 / ② 3の固定回復<br>
+                ※1回のセッションにつき、持ち込みは<strong>卓全体で2つまで</strong>とします。
+            </li>
+            <li><strong>武器の持ち込み：</strong> 持ち込み自体は可能です。ただし、現実世界で日常的に持っていて怪しまれるものは《隠す》技能が必要です。</li>
+            <li><strong>警察の仕様：</strong> 空野卓の警察はそんじゃそこらの警察と違い基本的に優秀なため、職質される可能性がある武器を持つ場合、《言いくるめ》かリアル言い訳を考えてくる必要があります。</li>
+        </ul>
+
+        <h3>成長ルール</h3>
+        <table>
+            <tr>
+                <th style="width: 25%;">初期値成功</th>
+                <td>即時で <strong>1d10</strong> の成長。それ以降は通常クリティカルと同一処理。</td>
+            </tr>
+            <tr>
+                <th>クリティカル</th>
+                <td>シナリオ終了後に算出。<strong>【判定：1d10の成長判定】</strong><br>成長ロール成功で1、失敗で <strong>1d5</strong> 成長が可能。</td>
+            </tr>
+            <tr>
+                <th>ファンブル</th>
+                <td>シナリオ終了後に算出。ファンブルの場合は成長判定に <strong>+1</strong> の補正が入ります。</td>
+            </tr>
+        </table>
+
+        <h3>HP・負傷・気絶ルール</h3>
+        <ul>
+            <li><strong>応急手当：</strong> 1d3 回復</li>
+            <li><strong>医学：</strong> 1d4 回復</li>
+            <li><strong>応急手当 ＋ 医学：</strong> 1d3 ＋ 1d4 回復 （※医学は戦闘中や警戒態勢時には使用不可）</li>
+            <li><strong>回復のクリティカル／ファンブル：</strong> 下記の戦闘表、または専門ルールに準拠。</li>
+            <li><strong>自動気絶ライン：</strong> HP <strong>2</strong> 以下で気絶。</li>
+            <li><strong>ロストライン：</strong> HP 0以下の場合でも、次のラウンド内に回復が間に合えば復帰が可能。</li>
+            <li><strong>ショック：</strong> 一度に <strong>5以上</strong> のダメージを受けた場合、《CON * 5》ロールが必要です。</li>
+        </ul>
+    </section>
+
+    <section id="madness-tables">
+        <h2>発狂・狂気ルール</h2>
+        <p style="font-size: 14px;"><strong>クリティカル時：</strong> 減少値を最低値にする / <strong>ファンブル時：</strong> 減少値を最大値にする<br>
+        ※不定の更新はシナリオ内時間で1日経過すると基本しますが、緊張状態が続くとしない場合があります。<br>
+        ※発狂解除は、精神分析（物理）、精神分析、心理学-20 での短期解除を採用しています。</p>
+
+        <details>
+            <summary>▼ 一時的発狂表 《1D10＋4ラウンド》を見る</summary>
+            <ol>
+                <li><strong>異常性癖：</strong> 興奮するモノへの性的趣向が芽生える。性癖対象が傍にある間、探索技能-50。</li>
+                <li><strong>恐怖喪失：</strong> 狂気解除までSAN減少が発生しない代わり、クトゥルフ神話技能が出た数値分成長する。</li>
+                <li><strong>強迫観念：</strong> 異常に行動的になり危険に率先して進む。【目星】【聞き耳】-50。</li>
+                <li><strong>自己主義：</strong> 保身以外の存在に冷酷になり、他人を蹴落とすようになる。【信用】-100。</li>
+                <li><strong>短絡的思考：</strong> 後先考えない行動をとる。未知の道具やボタンをすぐ使いたくなる。【アイデア】その他探索-10。</li>
+                <li><strong>偏執病：</strong> 周囲を疑う異常な妄想に囚われ、話し方もぎこちなくなる。【信用】【説得】【言いくるめ】-50。</li>
+                <li><strong>多弁症：</strong> 常に内容のないうわごとを喋り続け、会話が成り立たなくなる。【聞き耳】【隠れる】【忍び歩き】-50。</li>
+                <li><strong>感情の喪失：</strong> あらゆる感情や興味、知的好奇心が劇的に薄くなる。【目星】【図書館】その他知識-20。</li>
+                <li><strong>無能：</strong> 思考も行動もできなくなり、指示が出ない限り全行動判定を行えなくなる。</li>
+                <li><strong>反響：</strong> 他人の動作や発言をそのまま反復する。ただし行おうとする全ての判定に-20の補正。</li>
+            </ol>
+        </details>
+
+        <details>
+            <summary>▼ 不定の狂気表 《1d3ヶ月(リアルタイム)》を見る</summary>
+            <ol>
+                <li><strong>多動症：</strong> 常に動いていないと落ち着かなくなる。行動技能-30。</li>
+                <li><strong>感情の噴出：</strong> 感情の起伏が著しく激しくなり、すぐに怒り・泣き・笑う。交渉技能-30。</li>
+                <li><strong>異常執着：</strong> 特定の物や人物に執着する。対象が近くにない場合、探索技能-50。</li>
+                <li><strong>他者依存：</strong> 一人を恐れ、手の届く範囲に人がいないと酷い恐怖に襲われる。傍に誰もいない場合、探索技能-50。</li>
+                <li><strong>孤立願望：</strong> 他人が近くにいることに耐えられず単独行動をとる。同じ空間に人がいる場合、探索技能-50。</li>
+                <li><strong>健忘症：</strong> 目的や呪文、アーティファクトの使い方をすべて忘却する。知識技能-30。</li>
+                <li><strong>盲目の崇拝：</strong> 特定の他人に盲目的に尽くし、その人以外の話を一切聞かなくなる。</li>
+                <li><strong>狂信的知識欲求：</strong> 魔導書やAFを独り占めする。情報共有不可になり、クトゥルフ神話技能+10。</li>
+                <li><strong>異食症：</strong> 奇妙な物（土や人肉）を欲する。口にした際にHP-2、SAN-1D3。</li>
+                <li><strong>自傷癖：</strong> 自分の体を傷つけ続ける。止められない限り自傷の度HP1D3減少し、残り体力半分まで続く。</li>
+            </ol>
+        </details>
+    </section>
+
+    <section id="gp-system">
+        <h2>GP（キャラシ練頑張ったね賞）について</h2>
+        <p style="font-size: 14px;">長文のキャラメモや自作立ち絵など、探索者を練ってくれたPLへのねぎらいハウスルールです。<br>
+        貯まったポイント（P）は<strong>7版の幸運消費と同じ要領</strong>（あと少し足りない時の足しやファンブル回避）で、そのセッション中のみ使えます。<br>
+        ※成功を決定的成功にすることは不可。シナリオ指定の振り直し不可ダイスや、重大な分岐点では使用できません。</p>
+        
+        <table>
+            <tr>
+                <th style="width: 30%;">自作立ち絵</th>
+                <td>1枚につき <strong>1P</strong> ／ 表情差分2枚につき <strong>1P</strong> ／ 戦闘差分につき <strong>1P</strong></td>
+            </tr>
+            <tr>
+                <th>依頼・購入立ち絵</th>
+                <td>1枚につき <strong>1P</strong> ／ 差分3枚につき <strong>1P</strong></td>
+            </tr>
+            <tr>
+                <th>キャラクターシート<br>(プロフィール長文)</th>
+                <td>500文字以上：<strong>1P</strong> ／ 1000文字以上：<strong>2P</strong> ／ 5000文字以上：<strong>3P</strong><br>（1万文字以上は要相談）</td>
+            </tr>
+        </table>
+    </section>
+
+    <section id="battle-rules">
+        <h2>戦闘ルール</h2>
+        <p style="font-size: 14px;">当卓は、大正時代を除いた戦闘知識に乏しいため、<strong>提案に具体性・論理的な説明</strong>を求めています。処理・描写可能と判断したものは柔軟に許可します。<br>
+        ※サプリ等のうち「貫通ルール」「ライフル・ショットガンの受け流し」「武器ごとの命中率変化」「自動火器」は処理や管理の関係上、<strong>不採用</strong>としています。</p>
+
+        <h3>戦闘におけるクリティカル/ファンブルについて</h3>
+        <table class="battle-table">
+            <thead>
+                <tr>
+                    <th style="width: 12%;">出目</th>
+                    <th style="width: 22%;">移動</th>
+                    <th style="width: 22%;">攻撃</th>
+                    <th style="width: 22%;">回避・受け流し</th>
+                    <th style="width: 22%;">回復</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="crit-row">
+                    <td>1</td>
+                    <td>戦闘技能まですべてが自動成功となる。</td>
+                    <td>ダメージ二倍 及び 回避不可</td>
+                    <td>任意選択 カウンター（通常ダメージ）<br>回避/nの値が1回復する</td>
+                    <td>6の固定回復 or 1d10の回復</td>
+                </tr>
+                <tr class="crit-row" style="background-color: #f7faff;">
+                    <td>2〜5</td>
+                    <td>戦闘に即時で映れたとしてDEX判定が不要となる。そのDEX判定でクリティカル下場合、戦闘技能が自動成功となる。</td>
+                    <td>ダメージ二倍 回避不可<br>どちらか一方をダイスで選択する。</td>
+                    <td>ダイス選択 カウンター（半ダメージ）<br>回避/nの値が1回復する</td>
+                    <td>3固定回復 or 1d6の回復</td>
+                </tr>
+                <tr class="fumb-row" style="background-color: #fffafb;">
+                    <td>95〜99</td>
+                    <td>その場でつまづいてしまいHP1の減少。</td>
+                    <td>1d味方の人数でランダム攻撃。<br>2回以上攻撃の場合、他の攻撃の成功判定を失敗に押し下げる。</td>
+                    <td>ダメージ二倍で攻撃を受ける。</td>
+                    <td>1d3のダメージ</td>
+                </tr>
+                <tr class="fumb-row">
+                    <td>100</td>
+                    <td>その場で盛大にこけてしまい、次の自分のターンまで行動不能。</td>
+                    <td>相手からの反撃を喰らう。<br>相手は攻撃判定が必要である。</td>
+                    <td>ダメージ二倍で攻撃を受ける。<br>敵がラウンドの最後に二回目の行動をする。</td>
+                    <td>3点の固定ダメージ</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>ターンと行動宣言</h3>
+        <p style="font-size: 13px;">DEX順に行動（同値は1d100の低い方が先行）。1ラウンドにつき以下の行動が可能です。</p>
+        <ul>
+            <li><strong>通常移動：</strong> 5m程の移動。追加攻撃をする場合はDEX判定が必要。</li>
+            <li><strong>全力移動：</strong> 10m程の移動。移動自体にDEX判定が必要（追加攻撃時のDEXにデバフ）。</li>
+            <li><strong>回避・受け流し：</strong> 何度でも可能ですが、回数を重ねるたびに値を <strong>/2、/3、/4...</strong> と減少させます。</li>
+            <li><strong>デュオ攻撃：</strong> DEXが同値もしくは +-2 以内のみ要相談で可能。</li>
+            <li><strong>防御姿勢：</strong> 次回ターンまで回避の元値 ＋10（そのラウンドは攻撃不可）。</li>
+            <li><strong>警戒：</strong> 次回ラウンド開始時に行動を持ち越せる（奇襲へのマイナス補正可）。他姿勢と併用不可。</li>
+            <li><strong>カウンター準備：</strong> 回避成功時、直前の武器で反撃。ダメージは 1/2。武器は前ターンのもの固定。</li>
+            <li><strong>陽動（おとり）：</strong> DEX判定（規模による倍率あり）に成功で、他PLの行動に補正を与える。</li>
+            <li><strong>射撃後退：</strong> 射撃しつつ後退。相手の近接にデバフを与えるが、自身の次回の回避にもデバフ。</li>
+            <li><strong>拘束（組み付き・武道等）：</strong> 離れるまで他PLの攻撃を確定必中（F除く）とする。自身は回避・攻撃不可。拘束対象へ他PLがファンブルした場合、自身へダメージ。</li>
         </ul>
     </section>
 </div>
+
+<img src="cat.png" alt="歩く猫" class="walking-cat">
+
 </body>
 </html>
