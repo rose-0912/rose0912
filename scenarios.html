@@ -5,53 +5,406 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>スタジオ猫 - 通過シナリオ</title>
     <style>
-        body { font-family: sans-serif; background-color: #f3effa; color: #3b3543; margin: 0; padding: 0; }
-        .container { max-width: 800px; margin: 30px auto; padding: 30px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(142, 124, 171, 0.1); }
-        header { text-align: center; border-bottom: 2px solid #b3a2cb; padding-bottom: 20px; margin-bottom: 30px; }
+        /* 全体のデザイン設定（他ページと完全統一） */
+        body { 
+            font-family: sans-serif; 
+            background-color: #f3effa; 
+            color: #3b3543; 
+            margin: 0; 
+            padding: 0; 
+            position: relative;
+            overflow-x: hidden; 
+            min-height: 100vh;
+        }
+        .container { 
+            max-width: 850px; 
+            margin: 30px auto 250px auto; /* 超巨大猫用の下部余白 */
+            padding: 30px; 
+            background: #ffffff; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(142, 124, 171, 0.1); 
+            position: relative;
+            z-index: 2; 
+        }
+        
+        /* ヘッダーと猫APNG */
+        header { 
+            text-align: center; 
+            border-bottom: 2px solid #b3a2cb; 
+            padding-bottom: 20px; 
+            margin-bottom: 30px; 
+            position: relative;
+        }
+        .header-cat {
+            display: block;
+            width: 45px;
+            height: 45px;
+            margin: 0 auto 5px auto;
+            object-fit: contain;
+        }
         h1 { margin: 0; font-size: 28px; letter-spacing: 0.08em; color: #6c528d; }
         .subtitle { font-size: 14px; color: #8e7cab; margin: 5px 0 0 0; }
-        h2 { font-size: 18px; border-left: 4px solid #9d81ba; padding-left: 10px; margin-top: 40px; color: #513971; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #e1daf0; padding: 12px; text-align: left; font-size: 14px; }
-        th { background-color: #fbf9fe; color: #513971; }
+        
+        /* ナビゲーションメニュー */
         nav { text-align: center; margin-bottom: 20px; }
-        nav a { margin: 0 10px; color: #8261ad; text-decoration: none; font-size: 14px; font-weight: bold; }
+        nav a { margin: 0 8px; color: #8261ad; text-decoration: none; font-size: 14px; font-weight: bold; }
         nav a:hover { text-decoration: underline; }
         nav a.active { color: #4a148c; border-bottom: 2px solid #4a148c; padding-bottom: 2px; }
+
+        /* 見出しと巨大肉球スタンプ */
+        h2 { 
+            font-size: 20px; 
+            border-left: 5px solid #9d81ba; 
+            padding-left: 12px; 
+            margin-top: 40px; 
+            margin-bottom: 20px;
+            color: #513971; 
+            position: relative; 
+            z-index: 1; 
+        }
+        h2::after {
+            content: "🐾";
+            position: absolute;
+            left: -22px;     
+            top: -55px;      
+            color: rgba(157, 129, 186, 0.12); 
+            font-size: 80px; 
+            transform: rotate(-15deg); 
+            pointer-events: none;
+            z-index: -1;     
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.8;
+            margin: 15px 0;
+        }
+
+        /* テーブル（表）のデザイン */
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 15px; 
+            margin-bottom: 30px; 
+        }
+        th, td { 
+            border: 1px solid #e1daf0; 
+            padding: 12px 10px; 
+            text-align: left; 
+            font-size: 14px; 
+            line-height: 1.5; 
+        }
+        th { 
+            background-color: #fbf9fe; 
+            color: #513971; 
+            font-weight: bold; 
+            user-select: none;
+            white-space: nowrap;
+        }
+        th.sortable {
+            cursor: pointer;
+            position: relative;
+        }
+        th.sortable:hover {
+            background-color: #f3effa;
+        }
+        th.sortable::after {
+            content: " ↕";
+            font-size: 11px;
+            color: #b3a2cb;
+            margin-left: 4px;
+        }
+        th.sort-asc::after { content: " 🐾↑"; color: #4a148c; }
+        th.sort-desc::after { content: " 🐾↓"; color: #4a148c; }
+
+        td { color: #3b3543; }
+        tbody tr:hover { background-color: #fbf9fe; }
+
+        /* ログイン・簡単入力フォームのスタイル */
+        .admin-panel {
+            margin-top: 50px;
+            background: #f8f6fc;
+            border: 2px dashed #d1c4e9;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .admin-title { font-size: 15px; font-weight: bold; color: #513971; margin-bottom: 15px; display: flex; align-items: center; gap: 5px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
+        .form-group label { font-size: 12px; font-weight: bold; color: #666; }
+        .form-group input, .form-group select { padding: 8px; border-radius: 6px; border: 1px solid #b39ddb; outline: none; font-size: 14px; background: #fff; color: #3b3543; }
+        .form-group input:focus, .form-group select:focus { border-color: #7b1fa2; }
+
+        .submit-btn { background: linear-gradient(135deg, #9575cd 0%, #673ab7 100%); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 14px; width: 100%; box-shadow: 0 3px 0 #4527a0; transition: transform 0.1s; }
+        .submit-btn:active { transform: scale(0.98); box-shadow: none; position: relative; top: 3px; }
+        
+        .delete-btn { background: none; border: none; color: #aaa; cursor: pointer; font-size: 14px; padding: 0 4px; display: none; } /* 初期状態は非表示 */
+        .delete-btn:hover { color: #c2185b; }
+
+        /* アニメーションの設定（歩くメガ猫） */
+        .walking-cat {
+            position: fixed;
+            bottom: -50px; 
+            left: -550px; 
+            width: 500px; 
+            height: 500px;
+            z-index: 1; 
+            pointer-events: none; 
+            transform: scaleX(-1); 
+            animation: catWalkMega 40s infinite linear;
+            object-fit: contain;
+        }
+        @keyframes catWalkMega {
+            0% { left: -550px; }
+            85% { left: 100vw; }
+            100% { left: 100vw; }
+        }
     </style>
 </head>
 <body>
+
 <div class="container">
     <header>
+        <img src="cat.png" alt="猫" class="header-cat">
         <h1>スタジオ猫</h1>
         <p class="subtitle">TRPG Profile & Tools</p>
     </header>
 
-<nav>
+    <nav>
         <a href="index.html">自己紹介</a> | 
         <a href="rules.html">ハウスルール</a> | 
-        <a href="scenarios.html">通過シナリオ</a> | 
+        <a href="scenarios.html" class="active">通過シナリオ</a> | 
         <a href="owned-scenarios.html">回せるシナリオ</a> | 
         <a href="dice.html">Webダイス</a>
     </nav>
     
     <section>
         <h2>通過シナリオ履歴</h2>
-        <table>
+        <p style="font-size: 13px; color: #8e7cab; margin-bottom: 5px;">※「システム」「新規継続」「生還ロスト」の見出しをクリックすると、並び替えができます。</p>
+        
+        <table id="scenario-table">
             <thead>
                 <tr>
-                    <th style="width: 50%;">シナリオ名</th>
-                    <th style="width: 25%;">陣形（PC/KP）</th>
-                    <th style="width: 25%;">状態・備考</th>
+                    <th class="sortable" onclick="sortTable(0)" style="width: 25%;">システム</th>
+                    <th style="width: 25%;">シナリオ名</th>
+                    <th style="width: 13%;">PC</th>
+                    <th class="sortable" onclick="sortTable(3)" style="width: 12%;">新規継続</th>
+                    <th class="sortable" onclick="sortTable(4)" style="width: 12%;">生還ロスト</th>
+                    <th style="width: 13%;">備考</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr><td>クトゥルフ神話TRPG「毒入りスープ」</td><td>PL（新規）</td><td>生還</td></tr>
-                <tr><td>クトゥルフ神話TRPG「狂気山脈」</td><td>KP</td><td>4回GM可能</td></tr>
-                <tr><td>エモクロアTRPG「新世界より」</td><td>PL（継続）</td><td>生還</td></tr>
-            </tbody>
+            <tbody id="table-body">
+                </tbody>
         </table>
+
+        <div class="admin-panel" id="login-panel">
+            <div class="admin-title">🔒 管理者ログイン（履歴の追加・削除用）</div>
+            <div class="form-group" style="max-width: 300px; margin-bottom: 15px;">
+                <label>パスワードキー</label>
+                <input type="password" id="admin-password" placeholder="パスワードを入力してください">
+            </div>
+            <button class="submit-btn" style="max-width: 200px;" onclick="checkPassword()">ログイン🐾</button>
+        </div>
+
+        <div class="admin-panel" id="form-panel" style="display: none;">
+            <div class="admin-title">🐾 通過シナリオ履歴を追加する (管理者ログイン中)</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>システム</label>
+                    <select id="form-system">
+                        <option value="クトゥルフ神話TRPG">クトゥルフ神話TRPG</option>
+                        <option value="新クトゥルフ神話TRPG">新クトゥルフ神話TRPG</option>
+                        <option value="エモクロアTRPG">エモクロアTRPG</option>
+                        <option value="その他">その他</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>シナリオ名</label>
+                    <input type="text" id="form-title" placeholder="例：毒入りスープ">
+                </div>
+                <div class="form-group">
+                    <label>PC（探索者名・役職）</label>
+                    <input type="text" id="form-pc" placeholder="例：PL / KP / 探索者名">
+                </div>
+                <div class="form-group">
+                    <label>新規継続</label>
+                    <select id="form-type">
+                        <option value="新規">新規</option>
+                        <option value="継続">継続</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>生還ロスト</label>
+                    <select id="form-status">
+                        <option value="生還">生還</option>
+                        <option value="ロスト">ロスト</option>
+                        <option value="その他">その他</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>備考</label>
+                    <input type="text" id="form-note" placeholder="空欄なら - になります">
+                </div>
+            </div>
+            <button class="submit-btn" onclick="addScenario()">通過履歴に追加する 🐾</button>
+        </div>
     </section>
 </div>
+
+<img src="cat.png" alt="歩く猫" class="walking-cat">
+
+<script>
+    // 【管理者設定】ログイン用のパスワード（ここを自由に変えられます）
+    const ADMIN_PASSWORD_KEY = "cat0912sorano";
+    let isLoggedIn = false;
+
+    // 初期データ
+    const defaultScenarios = [
+        { system: "クトゥルフ神話TRPG", title: "毒入りスープ", pc: "PL", type: "新規", status: "生還", note: "-" },
+        { system: "新クトゥルフ神話TRPG", title: "狂気山脈", pc: "KP", type: "新規", status: "その他", note: "4回GM可能" },
+        { system: "エモクロアTRPG", title: "新世界より", pc: "PL", type: "継続", status: "生還", note: "-" }
+    ];
+
+    let scenarios = [];
+    let currentSortColumn = -1;
+    let isAscending = true;
+
+    // パスワードチェック関数
+    function checkPassword() {
+        const input = document.getElementById("admin-password").value;
+        if (input === ADMIN_PASSWORD_KEY) {
+            isLoggedIn = true;
+            document.getElementById("login-panel").style.display = "none";
+            document.getElementById("form-panel").style.display = "block";
+            renderTable(scenarios); // 削除ボタンを表示するために表を再描画
+            alert("ログインしました！編集モードに移行します🐾");
+        } else {
+            alert("パスワードが違います、持ち主専用です🐾");
+        }
+    }
+
+    // 保存データを読み込んで表を組み立てる関数
+    function loadScenarios() {
+        const saved = localStorage.getItem('cat_scenarios');
+        if (saved) {
+            scenarios = JSON.parse(saved);
+        } else {
+            scenarios = defaultScenarios;
+            localStorage.setItem('cat_scenarios', JSON.stringify(scenarios));
+        }
+        renderTable(scenarios);
+    }
+
+    // 画面の表（tbody）を描画する処理
+    function renderTable(dataList) {
+        const tbody = document.getElementById("table-body");
+        tbody.innerHTML = "";
+
+        dataList.forEach((item, index) => {
+            const row = document.createElement("tr");
+            
+            // ログイン中のみ削除用❌マークのインラインスタイルを上書き
+            const deleteBtnStyle = isLoggedIn ? "display: inline-block;" : "display: none;";
+
+            row.innerHTML = `
+                <td>${item.system}</td>
+                <td>${item.title}</td>
+                <td>${item.pc}</td>
+                <td>${item.type}</td>
+                <td>${item.status}</td>
+                <td style="display:flex; justify-content:space-between; align-items:center; gap:5px; border:none; padding:12px 10px;">
+                    <span>${item.note}</span>
+                    <button class="delete-btn" style="${deleteBtnStyle}" onclick="deleteScenario(${index})" title="削除">❌</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    // 新しいシナリオを追加する関数
+    function addScenario() {
+        if (!isLoggedIn) return;
+
+        const system = document.getElementById("form-system").value;
+        const title = document.getElementById("form-title").value.trim();
+        const pc = document.getElementById("form-pc").value.trim() || "-";
+        const type = document.getElementById("form-type").value;
+        const status = document.getElementById("form-status").value;
+        const note = document.getElementById("form-note").value.trim() || "-";
+
+        if (!title) { alert("シナリオ名は必ず入力してくださいね🐾"); return; }
+
+        scenarios.push({ system, title, pc, type, status, note });
+        localStorage.setItem('cat_scenarios', JSON.stringify(scenarios));
+        
+        // フォームをリセット
+        document.getElementById("form-title").value = "";
+        document.getElementById("form-pc").value = "";
+        document.getElementById("form-note").value = "";
+
+        renderTable(scenarios);
+        resetHeaders();
+    }
+
+    // シナリオを削除する関数
+    function deleteScenario(index) {
+        if (!isLoggedIn) return;
+        
+        if (confirm("このシナリオ履歴を削除しても大丈夫ですか？🐾")) {
+            scenarios.splice(index, 1);
+            localStorage.setItem('cat_scenarios', JSON.stringify(scenarios));
+            renderTable(scenarios);
+            resetHeaders();
+        }
+    }
+
+    function resetHeaders() {
+        const headers = document.querySelectorAll("#scenario-table th");
+        headers.forEach(th => th.classList.remove("sort-asc", "sort-desc"));
+        currentSortColumn = -1;
+    }
+
+    // 指定された3列のみで動くあいうえお並び替え関数
+    function sortTable(columnIndex) {
+        const table = document.getElementById("scenario-table");
+        const headers = table.querySelectorAll("th");
+
+        if (currentSortColumn === columnIndex) {
+            isAscending = !isAscending;
+        } else {
+            isAscending = true;
+            currentSortColumn = columnIndex;
+        }
+
+        headers.forEach((th, idx) => {
+            th.classList.remove("sort-asc", "sort-desc");
+            if (idx === columnIndex) {
+                th.classList.add(isAscending ? "sort-asc" : "sort-desc");
+            }
+        });
+
+        const keys = ["system", "", "", "type", "status", ""];
+        const targetKey = keys[columnIndex];
+
+        if (!targetKey) return; 
+
+        const sorted = [...scenarios].sort((a, b) => {
+            const valA = a[targetKey].trim();
+            const valB = b[targetKey].trim();
+
+            if (valA === "-" || valA === "") return 1;
+            if (valB === "-" || valB === "") return -1;
+
+            return isAscending 
+                ? valA.localeCompare(valB, 'ja') 
+                : valB.localeCompare(valA, 'ja');
+        });
+
+        renderTable(sorted);
+    }
+
+    window.onload = loadScenarios;
+</script>
+
 </body>
 </html>
