@@ -13,12 +13,12 @@
             margin: 0; 
             padding: 0; 
             position: relative;
-            overflow-x: hidden; /* 猫が画面外にはみ出た時の横スクロールを防止 */
+            overflow-x: hidden; 
             min-height: 100vh;
         }
         .container { 
             max-width: 800px; 
-            margin: 30px auto 250px auto; /* 超巨大猫が文字に被らないよう、下の余白を大幅に拡張（250px） */
+            margin: 30px auto 250px auto; 
             padding: 30px; 
             background: #ffffff; 
             border-radius: 12px; 
@@ -45,7 +45,7 @@
         h1 { margin: 0; font-size: 28px; letter-spacing: 0.08em; color: #6c528d; }
         .subtitle { font-size: 14px; color: #8e7cab; margin: 5px 0 0 0; }
         
-        /* 見出しと【背面の巨大肉球スタンプ】 */
+        /* 見出しと巨大肉球スタンプ*/
         h2 { 
             font-size: 18px; 
             border-left: 4px solid #9d81ba; 
@@ -53,19 +53,19 @@
             margin-top: 40px; 
             color: #513971; 
             position: relative;
-            z-index: 1; /* 文字の手前/後ろの重なりをコントロール */
+            z-index: 1; 
         }
-        /* 「自己紹介」の文字の真裏に肉球を配置 */
+        /* 肉球の位置を「自」の文字の真裏（中心）へ微調整 */
         h2::after {
             content: "🐾";
             position: absolute;
-            left: 5px;       /* 右側から「左側（文字の開始位置）」へ移動 */
-            top: -42px;      /* 文字の真後ろに重なるように高さを調整 */
+            left: -22px;     /* 「自」の中心に合うように左へ少しずらす */
+            top: -55px;      /* さらに上へ引き上げ */
             color: rgba(157, 129, 186, 0.12); 
             font-size: 80px; 
-            transform: rotate(-15deg); /* 重なったときに綺麗に見えるよう逆向きに少し回転 */
+            transform: rotate(-15deg); 
             pointer-events: none;
-            z-index: -1;     /* 【重要】文字の「裏（背景）」に回り込ませる設定 */
+            z-index: -1;     /* 文字の裏に回り込ませる */
         }
 
         /* テーブルの設定 */
