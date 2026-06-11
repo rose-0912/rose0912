@@ -18,7 +18,7 @@
         }
         .container { 
             max-width: 800px; 
-            margin: 30px auto 100px auto; /* 下部に猫が歩くスペースを少し広めに空ける */
+            margin: 30px auto 120px auto; /* 下部に大きな猫が歩くスペースをしっかり空ける */
             padding: 30px; 
             background: #ffffff; 
             border-radius: 12px; 
@@ -35,7 +35,7 @@
             margin-bottom: 30px; 
             position: relative;
         }
-        /* タイトルの上にAPNGを表示（cat.png） */
+        /* タイトルの上のAPNG（cat.png） */
         .header-cat {
             display: block;
             width: 45px;
@@ -55,15 +55,14 @@
             color: #513971; 
             position: relative;
         }
-        /* 見出しの右側にどーんと大きな肉球スタンプ */
         h2::after {
             content: "🐾";
             position: absolute;
             right: 20px;
-            top: -25px; /* 大きくなった分、少し上にずらして配置 */
-            color: rgba(157, 129, 186, 0.12); /* 邪魔にならないうっすらした薄紫 */
-            font-size: 80px; /* サイズを大幅に拡大 */
-            transform: rotate(25deg); /* 少し角度をつけてスタンプ感を演出 */
+            top: -25px; 
+            color: rgba(157, 129, 186, 0.12); 
+            font-size: 80px; 
+            transform: rotate(25deg); 
             pointer-events: none;
         }
 
@@ -80,28 +79,32 @@
 
         /* ─── アニメーションの設定 ─── */
 
-        /* 最下部をトコトコ歩く猫APNG */
+        /* 最下部を一方通行でゆっくり歩く大猫APNG */
         .walking-cat {
             position: fixed;
-            bottom: 15px;
-            left: -80px; /* 画面の左外側からスタート */
-            width: 60px;  /* 歩く猫画像のサイズ */
-            height: 60px;
+            bottom: 10px;
+            left: -120px; /* 余裕を持って画面の左外側からスタート */
+            width: 100px; /* サイズをさらに大きく（100px四方） */
+            height: 100px;
             z-index: 1; /* 白いコンテナの裏を歩かせる */
             pointer-events: none; /* マウスの邪魔をしない設定 */
-            animation: catWalk 20s infinite linear;
+            /* 左右反転(scaleX(-1))させて、右向きの状態で歩かせます */
+            transform: scaleX(-1); 
+            /* 30秒かけてゆっくり1周（infinite）させる設定 */
+            animation: catWalkOneWay 30s infinite linear;
             object-fit: contain;
         }
 
-        @keyframes catWalk {
-            0% { left: -80px; transform: scaleX(1); } /* 右を向いて進む */
-            45% { left: 100vw; transform: scaleX(1); } /* 画面右端へ消える */
-            46% { transform: scaleX(-1); } /* 左を向く（反転） */
-            50% { left: 100vw; transform: scaleX(-1); } /* 待機 */
-            55% { left: 100vw; transform: scaleX(-1); } /* 左に進み始める */
-            95% { left: -80px; transform: scaleX(-1); } /* 画面左端へ消える */
-            96% { transform: scaleX(1); } /* 右を向く */
-            100% { left: -80px; transform: scaleX(1); } /* ループ */
+        @keyframes catWalkOneWay {
+            0% { 
+                left: -120px; 
+            }
+            85% { 
+                left: 100vw; /* 画面の右外側へゆっくり消えていく */
+            }
+            100% { 
+                left: 100vw; /* 次の周回までの少しのインターバル時間 */
+            }
         }
     </style>
 </head>
@@ -109,14 +112,12 @@
 
 <div class="container">
     <header>
-        <!-- タイトル上の猫APNG画像（cat.png） -->
         <img src="cat.png" alt="猫" class="header-cat">
         <h1>スタジオ猫</h1>
         <p class="subtitle">TRPG Profile & Tools</p>
         <p style="font-size: 14px; margin-top: 10px;">連絡先：Twitter(X) @xxxx / Discord: xxxx</p>
     </header>
 
-    <!-- 他のページに飛ぶメニューボタン -->
     <nav>
         <a href="index.html" class="active">自己紹介</a> | 
         <a href="rules.html">ハウスルール</a> | 
@@ -175,7 +176,7 @@
     </section>
 </div>
 
-<!-- 画面を歩き回る猫APNG画像（cat.png） -->
+<!-- 画面下を右向きで一方通行で歩く大猫（cat.png） -->
 <img src="cat.png" alt="歩く猫" class="walking-cat">
 
 </body>
