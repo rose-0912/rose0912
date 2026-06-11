@@ -120,7 +120,7 @@
         td { color: #3b3543; }
         tbody tr:hover { background-color: #fbf9fe; }
 
-        /* ログイン・簡単入力フォームのスタイル */
+        /* 簡単入力フォーム・隠しログインのスタイル */
         .admin-panel {
             margin-top: 50px;
             background: #f8f6fc;
@@ -130,6 +130,7 @@
         }
         .admin-title { font-size: 15px; font-weight: bold; color: #513971; margin-bottom: 15px; display: flex; align-items: center; gap: 5px; }
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
         .form-group { display: flex; flex-direction: column; gap: 5px; }
         .form-group label { font-size: 12px; font-weight: bold; color: #666; }
         .form-group input, .form-group select { padding: 8px; border-radius: 6px; border: 1px solid #b39ddb; outline: none; font-size: 14px; background: #fff; color: #3b3543; }
@@ -138,7 +139,7 @@
         .submit-btn { background: linear-gradient(135deg, #9575cd 0%, #673ab7 100%); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 14px; width: 100%; box-shadow: 0 3px 0 #4527a0; transition: transform 0.1s; }
         .submit-btn:active { transform: scale(0.98); box-shadow: none; position: relative; top: 3px; }
         
-        .delete-btn { background: none; border: none; color: #aaa; cursor: pointer; font-size: 14px; padding: 0 4px; display: none; } /* 初期状態は非表示 */
+        .delete-btn { background: none; border: none; color: #aaa; cursor: pointer; font-size: 14px; padding: 0 4px; display: none; } 
         .delete-btn:hover { color: #c2185b; }
 
         /* アニメーションの設定（歩くメガ猫） */
@@ -194,11 +195,13 @@
                 </tr>
             </thead>
             <tbody id="table-body">
-                </tbody>
+                <!-- ここにデータが展開されます -->
+            </tbody>
         </table>
 
-        <div class="admin-panel" id="login-panel">
-            <div class="admin-title">🔒 管理者ログイン（履歴の追加・削除用）</div>
+        <!-- 初期状態では完全に隠されているログインパネル -->
+        <div class="admin-panel" id="login-panel" style="display: none;">
+            <div class="admin-title">🔒 管理者ログイン</div>
             <div class="form-group" style="max-width: 300px; margin-bottom: 15px;">
                 <label>パスワードキー</label>
                 <input type="password" id="admin-password" placeholder="パスワードを入力してください">
@@ -206,6 +209,7 @@
             <button class="submit-btn" style="max-width: 200px;" onclick="checkPassword()">ログイン🐾</button>
         </div>
 
+        <!-- ログイン成功時に出現する追加フォーム -->
         <div class="admin-panel" id="form-panel" style="display: none;">
             <div class="admin-title">🐾 通過シナリオ履歴を追加する (管理者ログイン中)</div>
             <div class="form-grid">
@@ -254,8 +258,12 @@
 <img src="cat.png" alt="歩く猫" class="walking-cat">
 
 <script>
-    // 【管理者設定】ログイン用のパスワード（ここを自由に変えられます）
+    // 【管理者設定】修正された新しいパスワードキー
     const ADMIN_PASSWORD_KEY = "cat0912sorano";
+    // 【隠しコマンド設定】
+    const SECRET_COMMAND = "cat";
+    
+    let inputBuffer = "";
     let isLoggedIn = false;
 
     // 初期データ
@@ -269,6 +277,23 @@
     let currentSortColumn = -1;
     let isAscending = true;
 
+    // キーボード入力を監視する隠しコマンドシステム
+    window.addEventListener("keydown", (e) => {
+        if (isLoggedIn) return; 
+
+        inputBuffer += e.key.toLowerCase();
+        
+        if (inputBuffer.length > SECRET_COMMAND.length) {
+            inputBuffer = inputBuffer.substring(inputBuffer.length - SECRET_COMMAND.length);
+        }
+
+        if (inputBuffer === SECRET_COMMAND) {
+            document.getElementById("login-panel").style.display = "block";
+            document.getElementById("login-panel").scrollIntoView({ behavior: 'smooth' }); 
+            inputBuffer = ""; 
+        }
+    });
+
     // パスワードチェック関数
     function checkPassword() {
         const input = document.getElementById("admin-password").value;
@@ -276,8 +301,8 @@
             isLoggedIn = true;
             document.getElementById("login-panel").style.display = "none";
             document.getElementById("form-panel").style.display = "block";
-            renderTable(scenarios); // 削除ボタンを表示するために表を再描画
-            alert("ログインしました！編集モードに移行します🐾");
+            renderTable(scenarios); 
+            alert("認証成功！編集モードに移行します🐾");
         } else {
             alert("パスワードが違います、持ち主専用です🐾");
         }
@@ -302,8 +327,6 @@
 
         dataList.forEach((item, index) => {
             const row = document.createElement("tr");
-            
-            // ログイン中のみ削除用❌マークのインラインスタイルを上書き
             const deleteBtnStyle = isLoggedIn ? "display: inline-block;" : "display: none;";
 
             row.innerHTML = `
@@ -337,7 +360,6 @@
         scenarios.push({ system, title, pc, type, status, note });
         localStorage.setItem('cat_scenarios', JSON.stringify(scenarios));
         
-        // フォームをリセット
         document.getElementById("form-title").value = "";
         document.getElementById("form-pc").value = "";
         document.getElementById("form-note").value = "";
