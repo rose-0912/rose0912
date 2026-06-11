@@ -18,7 +18,7 @@
         }
         .container { 
             max-width: 800px; 
-            margin: 30px auto 80px auto; /* 下部に猫が歩くスペースを空ける */
+            margin: 30px auto 100px auto; /* 下部に猫が歩くスペースを少し広めに空ける */
             padding: 30px; 
             background: #ffffff; 
             border-radius: 12px; 
@@ -27,7 +27,7 @@
             z-index: 2; /* 文字が猫より手前に来るように設定 */
         }
         
-        /* ヘッダーと猫耳アニメーション */
+        /* ヘッダーと猫APNG */
         header { 
             text-align: center; 
             border-bottom: 2px solid #b3a2cb; 
@@ -35,19 +35,18 @@
             margin-bottom: 30px; 
             position: relative;
         }
-        /* タイトルの上に猫耳を錬成 */
-        header::before {
-            content: "🐱";
-            font-size: 30px;
+        /* タイトルの上にAPNGを表示（cat.png） */
+        .header-cat {
             display: block;
-            margin-bottom: -5px;
-            animation: earWiggle 3s infinite ease-in-out;
-            transform-origin: center bottom;
+            width: 45px;
+            height: 45px;
+            margin: 0 auto 5px auto;
+            object-fit: contain;
         }
         h1 { margin: 0; font-size: 28px; letter-spacing: 0.08em; color: #6c528d; }
         .subtitle { font-size: 14px; color: #8e7cab; margin: 5px 0 0 0; }
         
-        /* 見出しと足跡スタンプ */
+        /* 見出しと【巨大肉球スタンプ】 */
         h2 { 
             font-size: 18px; 
             border-left: 4px solid #9d81ba; 
@@ -56,14 +55,16 @@
             color: #513971; 
             position: relative;
         }
-        /* 見出しの右側にうっすら足跡スタンプ */
+        /* 見出しの右側にどーんと大きな肉球スタンプ */
         h2::after {
             content: "🐾";
             position: absolute;
-            right: 10px;
-            color: rgba(157, 129, 186, 0.15);
-            font-size: 24px;
-            transform: rotate(15deg);
+            right: 20px;
+            top: -25px; /* 大きくなった分、少し上にずらして配置 */
+            color: rgba(157, 129, 186, 0.12); /* 邪魔にならないうっすらした薄紫 */
+            font-size: 80px; /* サイズを大幅に拡大 */
+            transform: rotate(25deg); /* 少し角度をつけてスタンプ感を演出 */
+            pointer-events: none;
         }
 
         /* テーブルの設定 */
@@ -79,34 +80,28 @@
 
         /* ─── アニメーションの設定 ─── */
 
-        /* 1. 猫耳ピコピコアニメーション */
-        @keyframes earWiggle {
-            0%, 90%, 100% { transform: rotate(0deg) scale(1); }
-            93% { transform: rotate(-10deg) scale(1.05); }
-            96% { transform: rotate(10deg) scale(1.05); }
-        }
-
-        /* 2. 最下部をトコトコ歩く猫 */
+        /* 最下部をトコトコ歩く猫APNG */
         .walking-cat {
             position: fixed;
-            bottom: 10px;
-            left: -50px; /* 画面の左外側からスタート */
-            font-size: 32px;
-            line-height: 1;
+            bottom: 15px;
+            left: -80px; /* 画面の左外側からスタート */
+            width: 60px;  /* 歩く猫画像のサイズ */
+            height: 60px;
             z-index: 1; /* 白いコンテナの裏を歩かせる */
             pointer-events: none; /* マウスの邪魔をしない設定 */
             animation: catWalk 20s infinite linear;
+            object-fit: contain;
         }
 
         @keyframes catWalk {
-            0% { left: -50px; transform: scaleX(1); } /* 右を向いて進む */
+            0% { left: -80px; transform: scaleX(1); } /* 右を向いて進む */
             45% { left: 100vw; transform: scaleX(1); } /* 画面右端へ消える */
-            46% { transform: scaleX(-1); } /* 左を向く */
+            46% { transform: scaleX(-1); } /* 左を向く（反転） */
             50% { left: 100vw; transform: scaleX(-1); } /* 待機 */
             55% { left: 100vw; transform: scaleX(-1); } /* 左に進み始める */
-            95% { left: -50px; transform: scaleX(-1); } /* 画面左端へ消える */
+            95% { left: -80px; transform: scaleX(-1); } /* 画面左端へ消える */
             96% { transform: scaleX(1); } /* 右を向く */
-            100% { left: -50px; transform: scaleX(1); } /* ループ */
+            100% { left: -80px; transform: scaleX(1); } /* ループ */
         }
     </style>
 </head>
@@ -114,6 +109,8 @@
 
 <div class="container">
     <header>
+        <!-- タイトル上の猫APNG画像（cat.png） -->
+        <img src="cat.png" alt="猫" class="header-cat">
         <h1>スタジオ猫</h1>
         <p class="subtitle">TRPG Profile & Tools</p>
         <p style="font-size: 14px; margin-top: 10px;">連絡先：Twitter(X) @xxxx / Discord: xxxx</p>
@@ -128,7 +125,7 @@
         <a href="dice.html">Webダイス</a>
     </nav>
 
-    <!-- 自己紹介セクション（まとめた内容） -->
+    <!-- 自己紹介セクション -->
     <section id="profile">
         <h2>自己紹介</h2>
         <p>スタジオ猫へようこそ。<br>
@@ -178,8 +175,8 @@
     </section>
 </div>
 
-<!-- 画面を歩き回る猫の要素 -->
-<div class="walking-cat">🐈</div>
+<!-- 画面を歩き回る猫APNG画像（cat.png） -->
+<img src="cat.png" alt="歩く猫" class="walking-cat">
 
 </body>
 </html>
