@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スタジオ猫 - 回せるシナリオ</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f3effa; color: #3b3543; margin: 0; padding: 0; }
+        .container { max-width: 800px; margin: 30px auto; padding: 30px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(142, 124, 171, 0.1); }
+        header { text-align: center; border-bottom: 2px solid #b3a2cb; padding-bottom: 20px; margin-bottom: 30px; }
+        h1 { margin: 0; font-size: 28px; letter-spacing: 0.08em; color: #6c528d; }
+        .subtitle { font-size: 14px; color: #8e7cab; margin: 5px 0 0 0; }
+        h2 { font-size: 18px; border-left: 4px solid #9d81ba; padding-left: 10px; margin-top: 40px; color: #513971; }
+        p { margin: 10px 0; }
+        
+        /* テーブルの設定 */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #e1daf0; padding: 12px; text-align: left; font-size: 14px; }
+        th { background-color: #fbf9fe; color: #513971; }
+        
+        /* ナビゲーションメニュー */
+        nav { text-align: center; margin-bottom: 20px; }
+        nav a { margin: 0 8px; color: #8261ad; text-decoration: none; font-size: 14px; font-weight: bold; }
+        nav a:hover { text-decoration: underline; }
+        nav a.active { color: #4a148c; border-bottom: 2px solid #4a148c; padding-bottom: 2px; }
+
+        /* バッジの装飾 */
+        .badge {
+            display: inline-block;
+            padding: 2px 6px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 4px;
+            color: white;
+        }
+        .bg-coc { background-color: #6c528d; }
+        .bg-emo { background-color: #d81b60; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>スタジオ猫</h1>
+        <p class="subtitle">TRPG Profile & Tools</p>
+    </header>
+
+    <nav>
+        <a href="index.html">自己紹介</a> | 
+        <a href="rules.html">ハウスルール</a> | 
+        <a href="scenarios.html">通過シナリオ</a> | 
+        <a href="owned-scenarios.html" class="active">回せるシナリオ</a> | 
+        <a href="dice.html">Webダイス</a>
+    </nav>
+
+    <section>
+        <h2>KP/GM可能シナリオ一覧</h2>
+        <p>いつでもGMのお誘いお待ちしております！日程や人数はご相談ください。</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 20%;">システム</th>
+                    <th style="width: 45%;">シナリオ名</th>
+                    <th style="width: 15%;">人数</th>
+                    <th style="width: 20%;">目安時間</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="badge bg-coc">CoC6版</span></td>
+                    <td>狂気山脈 〜邪神の嶺〜</td>
+                    <td>3〜4人</td>
+                    <td>ボイセ 6〜8時間</td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-coc">CoC6版</span></td>
+                    <td>毒入りスープ</td>
+                    <td>1〜3人</td>
+                    <td>ボイセ 2時間</td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-emo">エモクロア</span></td>
+                    <td>新世界より</td>
+                    <td>1人（タイマン）</td>
+                    <td>ボイセ 3時間</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+</body>
+</html>
