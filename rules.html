@@ -56,16 +56,16 @@
             position: relative;
             z-index: 1; 
         }
-        /* セクション内の小見出し（紫の点線） */
+        /* セクション内の小見出し（紫の点線・文字サイズ変更なし・点線維持） */
         h3 {
             font-size: 20px; 
             color: #6c528d;
             margin-top: 35px;
             margin-bottom: 15px;
-            border-bottom: 1px dashed #b3a2cb;
+            border-bottom: 1px dashed #b3a2cb; /* 点線をそのまま残しました */
             padding-bottom: 5px;
             position: relative; /* 肉球の配置基準用 */
-            display: inline-block; /* 【修正】幅を文字の長さぴったりに合わせる */
+            display: inline-block; /* 幅を文字の長さぴったりに合わせる */
         }
         /* 末尾の文字の裏に半透明の肉球を完全に重ねる設定 */
         h3::after {
@@ -279,7 +279,7 @@
             <li><span class="marker-purple">ステータスの振り直し：</span>全体の能力値をまるごと振り直す回数制限はありません。ただし、<strong>特定の低い箇所だけを選んで個別に振り直すことは不可</strong>とします。</li>
             <li><span class="marker-purple">ステータスの理由振り：</span>キャラクターのバックボーンや設定上、理論的な理由がある場合に限り、理由振りを可とします。</li>
             <li><span class="marker-purple">持ち物について：</span><br>KPからの事前確認は特に取りません。ただし、CSに明記されていない持ち物に関しては、<br>「ドンキホーテ等に通常売っているか」の精査、またはその場での<strong>《幸運》判定</strong>の成功が必要です。</li>
-            <li><span class="marker-purple">探索者の年齢制限：</span><br>ルールブック上は《EDU ＋ 6》を年齢の下限最低値としていますが、何かしらの能力値・ロールプレイ上の「デメリット」を受け入れるので変化されれば、この年齢下限ルールを適用していない（さらに若い）キャラクターでも提出可能とします。</li>
+            <li><span class="marker-purple">探索者の年齢制限：</span><br>ルールブック上は《EDU ＋ 6》を年齢の下限最低値としていますが、何かしらの能力値・ロールプレイ上の「デメリット」を受け入れれば、この年齢下限ルールを適用していない（さらに若い）キャラクターでも提出可能とします。</li>
             <li><span class="marker-purple">特徴表の採用：</span><br>シナリオの進行上大きな問題がなく、私が事前に「今回のシナリオは特徴表の使用OKです」と明言していた場合に限り、採用可能です（最大2つまで）。</li>
             <li><span class="marker-purple">継続探索者の持ち込み：</span><br>シナリオの内容や推奨技能のバランスを考慮して許可します。ただし、過去シナリオで手に入れた魔術的道具やアーティファクト等は、基本的に今回のシナリオ内には持ち込めず「自宅に厳重保管している」扱いとなり、使用できません。</li>
         </ul>
