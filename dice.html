@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>スタジオ猫 - Webダイス</title>
     <style>
-        /* 全体のデザイン設定（ハウスルールページと完全統一） */
         body { 
             font-family: sans-serif; 
             background-color: #f3effa; 
@@ -18,7 +17,7 @@
         }
         .container { 
             max-width: 800px; 
-            margin: 30px auto 250px auto; /* 超巨大猫用の下部余白 */
+            margin: 30px auto 250px auto; 
             padding: 30px; 
             background: #ffffff; 
             border-radius: 12px; 
@@ -27,7 +26,6 @@
             z-index: 2; 
         }
         
-        /* ヘッダーと猫APNG */
         header { 
             text-align: center; 
             border-bottom: 2px solid #b3a2cb; 
@@ -45,13 +43,11 @@
         h1 { margin: 0; font-size: 28px; letter-spacing: 0.08em; color: #6c528d; }
         .subtitle { font-size: 14px; color: #8e7cab; margin: 5px 0 0 0; }
         
-        /* ナビゲーションメニュー */
         nav { text-align: center; margin-bottom: 20px; }
         nav a { margin: 0 8px; color: #8261ad; text-decoration: none; font-size: 14px; font-weight: bold; }
         nav a:hover { text-decoration: underline; }
         nav a.active { color: #4a148c; border-bottom: 2px solid #4a148c; padding-bottom: 2px; }
 
-        /* 見出しと【「ハ」の真裏に配置した巨大肉球スタンプ】 */
         h2 { 
             font-size: 20px; 
             border-left: 5px solid #9d81ba; 
@@ -80,7 +76,6 @@
             margin: 15px 0;
         }
 
-        /* ダイス選択パネル */
         .dice-panel { 
             display: flex; 
             flex-wrap: wrap; 
@@ -216,7 +211,6 @@
         .fumb-color { color: #c2185b; }
         .total-color { color: #4a148c; }
         
-        /* 履歴（ログ）用のスタイル */
         .dice-log-container { border-top: 1px dashed #c8b9dd; padding-top: 15px; text-align: left; max-width: 450px; margin: 0 auto; }
         .log-title { font-size: 13px; font-weight: bold; color: #6c528d; margin-bottom: 5px; }
         .log-list { list-style: none; padding: 0; margin: 0; font-size: 14px; }
@@ -228,7 +222,6 @@
         .log-crit-text { color: #1565c0; font-weight: bold; }
         .log-fumb-text { color: #c2185b; font-weight: bold; }
 
-        /* アニメーションの設定（歩くメガ猫を完全移植） */
         .walking-cat {
             position: fixed;
             bottom: -50px; 
@@ -330,7 +323,6 @@
 <script>
     let diceLogs = [];
 
-    // ローカルストレージからデータを読み込む関数
     function loadSavedCounters() {
         document.getElementById('total-crit-val').innerText = localStorage.getItem('cat_total_crit') || 0;
         document.getElementById('total-fumb-val').innerText = localStorage.getItem('cat_total_fumb') || 0;
@@ -346,32 +338,28 @@
         let critCount = 0;
         let fumbCount = 0;
 
-        // ① 各サイコロを個別に振って計算
         for (let i = 0; i < count; i++) {
             const roll = Math.floor(Math.random() * sides) + 1;
             results.push(roll);
             total += roll;
 
-            // 100面ダイスの場合のみ、個別に数をカウント
             if (sides === 100) {
                 if (roll >= 1 && roll <= 5) critCount++;
                 if (roll >= 96 && roll <= 100) fumbCount++;
             }
         }
 
-        // ② 【修正】永久集計データの自動更新（100面ダイスの時のみ総ロール数に加算）
         if (sides === 100) {
             let savedCrits = parseInt(localStorage.getItem('cat_total_crit') || 0, 10) + critCount;
             let savedFumbs = parseInt(localStorage.getItem('cat_total_fumb') || 0, 10) + fumbCount;
-            let savedRolls = parseInt(localStorage.getItem('cat_total_rolls') || 0, 10) + count; // 100面を振った個数分のみ加算
+            let savedRolls = parseInt(localStorage.getItem('cat_total_rolls') || 0, 10) + count;
 
             localStorage.setItem('cat_total_crit', savedCrits);
             localStorage.setItem('cat_total_fumb', savedFumbs);
             localStorage.setItem('cat_total_rolls', savedRolls);
-            loadSavedCounters(); // 画面をリフレッシュ
+            loadSavedCounters(); 
         }
 
-        // ③ サイコロ画面の生成
         const cubesDiv = document.getElementById('dice-cubes');
         cubesDiv.innerHTML = ''; 
 
@@ -390,7 +378,6 @@
             cubesDiv.appendChild(diceEl);
         });
 
-        // ④ 合計値の表示
         const totalDiv = document.getElementById('dice-total');
         let totalAlert = '';
         if (sides === 100 && (critCount > 0 || fumbCount > 0)) {
@@ -398,7 +385,6 @@
         }
         totalDiv.innerHTML = `合計: ${total}${totalAlert} <span style="font-size:0.9rem; font-weight:normal; color:#888;">(${count}D${sides})</span>`;
 
-        // ⑤ ログ用のラベル作成
         let label = '';
         let logItemClass = '';
         if (sides === 100) {
@@ -422,7 +408,6 @@
             diceLogs.pop();
         }
 
-        // ⑥ ログ画面の更新
         const logList = document.getElementById('dice-log');
         logList.innerHTML = '';
 
