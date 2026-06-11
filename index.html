@@ -18,7 +18,7 @@
         }
         .container { 
             max-width: 800px; 
-            margin: 30px auto 120px auto; /* 下部に大きな猫が歩くスペースをしっかり空ける */
+            margin: 30px auto 250px auto; /* 超巨大猫が文字に被らないよう、下の余白を大幅に拡張（250px） */
             padding: 30px; 
             background: #ffffff; 
             border-radius: 12px; 
@@ -35,7 +35,6 @@
             margin-bottom: 30px; 
             position: relative;
         }
-        /* タイトルの上のAPNG（cat.png） */
         .header-cat {
             display: block;
             width: 45px;
@@ -79,31 +78,30 @@
 
         /* ─── アニメーションの設定 ─── */
 
-        /* 最下部を一方通行でゆっくり歩く大猫APNG */
+        /* 5倍サイズでさらに画面下を歩く大猫APNG */
         .walking-cat {
             position: fixed;
-            bottom: 10px;
-            left: -120px; /* 余裕を持って画面の左外側からスタート */
-            width: 100px; /* サイズをさらに大きく（100px四方） */
-            height: 100px;
+            bottom: -50px; /* 【重要】マイナス値にして画面の一番下にめり込ませ、文字の邪魔を限界まで減らす */
+            left: -550px; /* 大きくなった分、画面左外の深いところからスタート */
+            width: 500px; /* サイズを5倍（500px四方）に超巨大化！ */
+            height: 500px;
             z-index: 1; /* 白いコンテナの裏を歩かせる */
-            pointer-events: none; /* マウスの邪魔をしない設定 */
-            /* 左右反転(scaleX(-1))させて、右向きの状態で歩かせます */
-            transform: scaleX(-1); 
-            /* 30秒かけてゆっくり1周（infinite）させる設定 */
-            animation: catWalkOneWay 30s infinite linear;
+            pointer-events: none; 
+            transform: scaleX(-1); /* 左右反転で右向き */
+            /* 40秒かけてさらにのっそりと1周させる設定 */
+            animation: catWalkMega 40s infinite linear;
             object-fit: contain;
         }
 
-        @keyframes catWalkOneWay {
+        @keyframes catWalkMega {
             0% { 
-                left: -120px; 
+                left: -550px; 
             }
             85% { 
-                left: 100vw; /* 画面の右外側へゆっくり消えていく */
+                left: 100vw; /* 画面右端へ通り抜ける */
             }
             100% { 
-                left: 100vw; /* 次の周回までの少しのインターバル時間 */
+                left: 100vw; /* ループまでのインターバル */
             }
         }
     </style>
@@ -126,7 +124,6 @@
         <a href="dice.html">Webダイス</a>
     </nav>
 
-    <!-- 自己紹介セクション -->
     <section id="profile">
         <h2>自己紹介</h2>
         <p>スタジオ猫へようこそ。<br>
@@ -176,7 +173,6 @@
     </section>
 </div>
 
-<!-- 画面下を右向きで一方通行で歩く大猫（cat.png） -->
 <img src="cat.png" alt="歩く猫" class="walking-cat">
 
 </body>
