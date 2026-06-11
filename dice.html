@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スタジオ猫 - Webダイス</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f3effa; color: #3b3543; margin: 0; padding: 0; }
+        .container { max-width: 800px; margin: 30px auto; padding: 30px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(142, 124, 171, 0.1); }
+        header { text-align: center; border-bottom: 2px solid #b3a2cb; padding-bottom: 20px; margin-bottom: 30px; }
+        h1 { margin: 0; font-size: 28px; letter-spacing: 0.08em; color: #6c528d; }
+        .subtitle { font-size: 14px; color: #8e7cab; margin: 5px 0 0 0; }
+        h2 { font-size: 18px; border-left: 4px solid #9d81ba; padding-left: 10px; margin-top: 40px; color: #513971; }
+        nav { text-align: center; margin-bottom: 20px; }
+        nav a { margin: 0 10px; color: #8261ad; text-decoration: none; font-size: 14px; font-weight: bold; }
+        nav a:hover { text-decoration: underline; }
+        nav a.active { color: #4a148c; border-bottom: 2px solid #4a148c; padding-bottom: 2px; }
+
+        /* ダイス機能のスタイル */
+        .dice-panel { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; background: #f3e5f5; padding: 20px; border-radius: 6px; margin-top: 15px; margin-bottom: 20px; justify-content: center; }
+        .dice-select-group { display: flex; align-items: center; gap: 8px; font-weight: bold; color: #4a148c; }
+        .dice-select-group select { padding: 6px 12px; border-radius: 4px; border: 1px solid #b39ddb; font-size: 1rem; background: #fff; color: #4a148c; cursor: pointer; }
+        .dice-btn { background: linear-gradient(135deg, #7b1fa2 0%, #4a148c 100%); color: white; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: transform 0.1s, opacity 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .dice-btn:hover { opacity: 0.9; }
+        .dice-btn:active { transform: scale(0.95); }
+        .dice-result-container { min-height: 80px; background: #fafafa; border: 2px dashed #b39ddb; border-radius: 6px; padding: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 20px; }
+        .dice-list { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; justify-content: center; }
+        
+        /* 正方形ダイスの設定 */
+        .dice-individual { display: inline-flex; justify-content: center; align-items: center; width: 45px; height: 45px; background: #764ba2; color: white; border-radius: 8px; font-weight: bold; font-size: 1.2rem; box-shadow: 0 3px 6px rgba(0,0,0,0.16); box-sizing: border-box; }
+        .dice-individual.small-text { font-size: 0.95rem; }
+        
+        /* 1〜5が出た時の青いダイス（クリティカル） */
+        .dice-critical { background: linear-gradient(135deg, #2196f3 0%, #1565c0 100%) !important; box-shadow: 0 0 10px rgba(33, 150, 243, 0.6); }
+        
+        /* 96〜100が出た時の赤いダイス（ファンブル） */
+        .dice-fumble { background: linear-gradient(135deg, #e91e63 0%, #c2185b 100%) !important; box-shadow: 0 0 10px rgba(233, 30, 99, 0.6); }
+        
+        .rolling { animation: rollEffect 0.4s ease-out; }
+        @keyframes rollEffect {
+            0% { transform: rotate(0deg) scale(0.5); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); opacity: 1; }
+        }
+        .total-score { font-size: 1.3rem; font-weight: bold; color: #4a148c; }
+        .placeholder-text { color: #888; font-style: italic; }
+        
+        /* 履歴（ログ）用のスタイル */
+        .dice-log-container { border-top: 1px dashed #c8b9dd; padding-top: 15px; text-align: left; max-width: 450px; margin: 0 auto; }
+        .log-title { font-size: 13px; font-weight: bold; color: #6c528d; margin-bottom: 5px; }
+        .log-list { list-style: none; padding: 0; margin: 0; font-size: 14px; }
+        .log-item { padding: 6px 0; border-bottom: 1px solid #f0eaf8; color: #666; display: flex; justify-content: space-between; align-items: center; }
+        .log-item:first-child { font-weight: bold; color: #333; }
+        
+        /* ログ内の特別なテキスト用カラー */
+        .log-has-special { font-weight: bold; color: #4a148c; }
+        .log-crit-text { color: #1565c0; font-weight: bold; }
+        .log-fumb-text { color: #c2185b; font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>スタジオ猫</h1>
+        <p class="subtitle">TRPG Profile & Tools</p>
+    </header>
+
+    <nav>
+        <a href="index.html">自己紹介</a> | 
+        <a href="rules.html">ハウスルール</a> | 
+        <a href="scenarios.html">通過シナリオ</a> | 
+        <a href="dice.html" class="active">Webダイス</a>
+    </nav>
+
+    <section>
+        <h2>Webダイス</h2>
+        <p>簡易的なダイスシミュレーターです。個数を選択して各ダイスボタンを押してください。</p>
+        
+        <div class="dice-panel">
+            <div class="dice-select-group">
+                <label for="dice-count">個数：</label>
+                <select id="dice-count">
+                    <option value="1">1個</option> <option value="2">2個</option> <option value="3">3個</option>
+                    <option value="4">4個</option> <option value="5">5個</option> <option value="6">6個</option>
+                    <option value="7">7個</option> <option value="8">8個</option> <option value="9">9個</option> <option value="10">10個</option>
+                </select>
+            </div>
+            <button class="dice-btn" onclick="rollDice(6)">1D6</button>
+            <button class="dice-btn" onclick="rollDice(10)">1D10</button>
+            <button class="dice-btn" onclick="rollDice(20)">1D20</button>
+            <button class="dice-btn" onclick="rollDice(100)">1D100</button>
+            
+            <div class="dice-select-group" style="margin-left: 10px;">
+                カスタム：
+                <input type="number" id="custom-sides" value="100" min="2" max="1000" style="width: 50px; padding: 5px; border-radius: 4px; border: 1px solid #b39ddb; text-align: center;"> 面
+                <button class="dice-btn" style="padding: 6px 12px; font-size: 0.9rem;" onclick="rollCustomDice()">振る</button>
+            </div>
+        </div>
+
+        <div class="dice-result-container">
+            <div class="dice-list" id="dice-cubes">
+                <span class="placeholder-text">ボタンを押すとダイスを振ります</span>
+            </div>
+            <div class="total-score" id="dice-total"></div>
+        </div>
+
+        <div class="dice-log-container">
+            <div class="log-title">🎲 履歴 (最大5件)</div>
+            <ul class="log-list" id="dice-log">
+                <li class="log-item" style="justify-content: center; color: #aaa;">まだログはありません</li>
+            </ul>
+        </div>
+    </section>
+</div>
+
+<script>
+    let diceLogs = [];
+
+    function rollDice(sides) {
+        const countSelect = document.getElementById('dice-count');
+        const count = parseInt(countSelect.value, 10);
+        
+        let results = [];
+        let total = 0;
+        let critCount = 0;
+        let fumbCount = 0;
+
+        // ① 各サイコロを個別に振って計算
+        for (let i = 0; i < count; i++) {
+            const roll = Math.floor(Math.random() * sides) + 1;
+            results.push(roll);
+            total += roll;
+
+            // 100面ダイスの場合のみ、個別に数をカウント
+            if (sides === 100) {
+                if (roll >= 1 && roll <= 5) critCount++;
+                if (roll >= 96 && roll <= 100) fumbCount++;
+            }
+        }
+
+        // ② サイコロ画面の生成
+        const cubesDiv = document.getElementById('dice-cubes');
+        cubesDiv.innerHTML = ''; // クリア
+
+        results.forEach(roll => {
+            const diceEl = document.createElement('div');
+            const textStyleClass = roll >= 100 ? 'small-text' : '';
+            
+            // 個別判定用のクラスを適用
+            let individualClass = '';
+            if (sides === 100) {
+                if (roll >= 1 && roll <= 5) individualClass = 'dice-critical';
+                else if (roll >= 96 && roll <= 100) individualClass = 'dice-fumble';
+            }
+
+            diceEl.className = `dice-individual ${textStyleClass} ${individualClass} rolling`;
+            diceEl.innerText = roll;
+            cubesDiv.appendChild(diceEl);
+        });
+
+        // ③ 合計値の表示
+        const totalDiv = document.getElementById('dice-total');
+        // 1D100を複数振って特殊な出目がある場合、合計値エリアにも少し通知を出す
+        let totalAlert = '';
+        if (sides === 100 && (critCount > 0 || fumbCount > 0)) {
+            totalAlert = ` <span style="font-size:0.9rem; margin-left:5px;">(C:${critCount} / F:${fumbCount})</span>`;
+        }
+        totalDiv.innerHTML = `合計: ${total}${totalAlert} <span style="font-size:0.9rem; font-weight:normal; color:#888;">(${count}D${sides})</span>`;
+
+        // ④ ログ用のラベル作成
+        let label = '';
+        let logItemClass = '';
+        if (sides === 100) {
+            if (critCount > 0 || fumbCount > 0) {
+                logItemClass = 'log-has-special'; // 特殊な出目があったログ全体を少し太字に
+                
+                let labels = [];
+                if (critCount > 0) labels.push(`<span class="log-crit-text">【クリティカルx${critCount}】</span>`);
+                if (fumbCount > 0) labels.push(`<span class="log-fumb-text">【ファンブルx${fumbCount}】</span>`);
+                label = ' ' + labels.join('');
+            }
+        }
+
+        const time = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        let logDetails = count > 1 ? ` [${results.join(', ')}]` : '';
+        const logText = `${count}D${sides} ➔ ${total}${logDetails}${label}`;
+        
+        diceLogs.unshift({ time: time, text: logText, logItemClass: logItemClass });
+
+        if (diceLogs.length > 5) {
+            diceLogs.pop();
+        }
+
+        // ⑤ ログ画面の更新
+        const logList = document.getElementById('dice-log');
+        logList.innerHTML = '';
+
+        diceLogs.forEach((log) => {
+            const li = document.createElement('li');
+            li.className = `log-item ${log.logItemClass}`;
+            li.innerHTML = `
+                <span>${log.text}</span>
+                <span style="font-size: 12px; color: #aaa; font-weight: normal;">${log.time}</span>
+            `;
+            logList.appendChild(li);
+        });
+    }
+
+    function rollCustomDice() {
+        const sidesInput = document.getElementById('custom-sides');
+        const sides = parseInt(sidesInput.value, 10);
+        if (isNaN(sides) || sides < 2) { alert('2以上の数字を入力してください。'); return; }
+        rollDice(sides);
+    }
+</script>
+</body>
+</html>
