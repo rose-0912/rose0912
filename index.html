@@ -68,9 +68,18 @@
             width: 30%; 
         }
 
-        /* リンクの装飾 */
-        a { color: #8261ad; text-decoration: none; }
-        a:hover { text-decoration: underline; }
+        /* ナビゲーションメニュー（GitHubでページを分ける時にも便利） */
+        nav {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        nav a {
+            margin: 0 10px;
+            color: #8261ad;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        nav a:hover { text-decoration: underline; }
 
         /* ダイス機能のスタイル */
         .dice-area {
@@ -172,7 +181,13 @@
         <p style="font-size: 14px; margin-top: 10px;">連絡先：Twitter(X) @xxxx / Discord: xxxx</p>
     </header>
 
-    <!-- ダイス機能セクション -->
+    <nav>
+        <a href="#dice-roller">Webダイス</a> | 
+        <a href="#profile">自己紹介</a> | 
+        <a href="#house-rules">ハウスルール</a> | 
+        <a href="#scenarios">通過シナリオ</a>
+    </nav>
+
     <section id="dice-roller">
         <h2>Webダイス</h2>
         <p>簡易的なダイスシミュレーターです。セッションの準備や、ふとした運試しにどうぞ。</p>
@@ -189,11 +204,9 @@
                 <button class="dice-btn" style="padding: 6px 15px;" onclick="rollCustomDice()">振る</button>
             </div>
 
-            <!-- 最新の出目表示 -->
             <div class="result-title">最新の出目</div>
             <div class="result-display" id="dice-result">-</div>
 
-            <!-- 履歴（ログ）表示 -->
             <div class="dice-log-container">
                 <div class="log-title">🎲 履歴 (最大5件)</div>
                 <ul class="log-list" id="dice-log">
@@ -203,7 +216,6 @@
         </div>
     </section>
 
-    <!-- 自己紹介セクション -->
     <section id="profile">
         <h2>自己紹介</h2>
         <p>「スタジオ猫」へようこそ。成人済みのTRPGプレイヤーです。ストーリー重視のシナリオや、じっくり話し合うロールプレイが好きです。</p>
@@ -214,7 +226,6 @@
         </table>
     </section>
 
-    <!-- ハウスルールセクション -->
     <section id="house-rules">
         <h2>ハウスルール（CoC6版基準）</h2>
         <ul>
@@ -224,7 +235,6 @@
         </ul>
     </section>
 
-    <!-- 通過シナリオセクション -->
     <section id="scenarios">
         <h2>通過シナリオ履歴</h2>
         <table>
@@ -244,47 +254,38 @@
     </section>
 </div>
 
-<!-- JavaScript部分 -->
 <script>
-    // 履歴を保存する配列
     let diceLogs = [];
 
     function rollDice(sides) {
-        // ダイスを振る
         const result = Math.floor(Math.random() * sides) + 1;
-        
-        // 色分け用のクラスを判定
         let colorClass = '';
         let label = '';
         
         if (sides === 100) {
             if (result >= 1 && result <= 5) {
                 colorClass = 'critical-color';
-                label = '【決定決定/クリティカル】';
+                label = '【クリティカル】';
             } else if (result >= 96 && result <= 100) {
                 colorClass = 'fumble-color';
-                label = '【致命的失敗/ファンブル】';
+                label = '【ファンブル】';
             }
         }
 
-        // ① 最新の出目エリアを更新
         const resultDiv = document.getElementById('dice-result');
         resultDiv.innerHTML = `<span class="${colorClass}">${result}</span> <span style="font-size:16px; font-weight:normal;">(1D${sides})</span>`;
 
-        // ② ログ配列に追加（新しいものを先頭にする）
         const time = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         const logText = `1D${sides} ➔ ${result} ${label}`;
         
         diceLogs.unshift({ time: time, text: logText, colorClass: colorClass });
 
-        // 5件を超えたら古いものを削除
         if (diceLogs.length > 5) {
             diceLogs.pop();
         }
 
-        // ③ ログの画面表示を更新
         const logList = document.getElementById('dice-log');
-        logList.innerHTML = ''; // 一旦クリア
+        logList.innerHTML = '';
 
         diceLogs.forEach((log) => {
             const li = document.createElement('li');
