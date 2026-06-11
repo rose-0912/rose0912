@@ -81,7 +81,7 @@
         }
         nav a:hover { text-decoration: underline; }
 
-        /* --- 提示いただいたダイス機能の追加スタイル --- */
+        /* --- ダイス機能のスタイル --- */
         .dice-panel {
             display: flex;
             flex-wrap: wrap;
@@ -148,7 +148,7 @@
             justify-content: center;
         }
         
-        /* ダイスの基本デザイン（通常は紫） */
+        /* 全て完全に正方形（45px四方）に統一 */
         .dice-individual {
             display: inline-flex;
             justify-content: center;
@@ -161,12 +161,11 @@
             font-weight: bold;
             font-size: 1.2rem;
             box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+            box-sizing: border-box; /* 枠線を含めて正方形をキープ */
         }
-        /* 多面ダイス用の可変幅設定 */
-        .dice-individual.wide {
-            width: auto;
-            min-width: 45px;
-            padding: 0 8px;
+        /* 3桁（100など）の数字の時に正方形からはみ出さないよう文字を少し小さくする */
+        .dice-individual.small-text {
+            font-size: 0.95rem;
         }
 
         /* 1〜5が出た時の青いダイス（クリティカル） */
@@ -232,7 +231,6 @@
             font-weight: bold;
             color: #333;
         }
-        /* ログ内のクリティカル・ファンブル色 */
         .log-crit { color: #1565c0 !important; font-weight: bold; }
         .log-fumb { color: #c2185b !important; font-weight: bold; }
     </style>
@@ -262,12 +260,18 @@
         <div class="dice-panel">
             <div class="dice-select-group">
                 <label for="dice-count">個数：</label>
+                <!-- 最大10個までに拡張 -->
                 <select id="dice-count">
                     <option value="1">1個</option>
                     <option value="2">2個</option>
                     <option value="3">3個</option>
                     <option value="4">4個</option>
                     <option value="5">5個</option>
+                    <option value="6">6個</option>
+                    <option value="7">7個</option>
+                    <option value="8">8個</option>
+                    <option value="9">9個</option>
+                    <option value="10">10個</option>
                 </select>
             </div>
             <button class="dice-btn" onclick="rollDice(6)">1D6</button>
@@ -284,11 +288,9 @@
 
         <!-- ダイス結果表示コンテナ -->
         <div class="dice-result-container">
-            <!-- 各サイコロが並ぶ場所 -->
             <div class="dice-list" id="dice-cubes">
                 <span class="placeholder-text">ボタンを押すとダイスを振ります</span>
             </div>
-            <!-- 合計値が表示される場所 -->
             <div class="total-score" id="dice-total"></div>
         </div>
 
@@ -353,14 +355,12 @@
         let results = [];
         let total = 0;
         
-        // ダイスを振る処理
         for (let i = 0; i < count; i++) {
             const roll = Math.floor(Math.random() * sides) + 1;
             results.push(roll);
             total += roll;
         }
 
-        // クリティカル・ファンブルの判定（1D100の1個振りの時のみ適用）
         let resultClass = '';
         let logClass = '';
         let label = '';
@@ -377,26 +377,22 @@
             }
         }
 
-        // ① サイコロエレメントの生成（アニメーション適用）
         const cubesDiv = document.getElementById('dice-cubes');
-        cubesDiv.innerHTML = ''; // クリア
-
-        // 10面、20面、100面などの多面ダイスは枠を広げるため wide クラスを付与
-        const wideClass = sides > 6 ? 'wide' : '';
+        cubesDiv.innerHTML = '';
 
         results.forEach(roll => {
             const diceEl = document.createElement('div');
-            // 提示されたスタイルをすべて適用し、rollingクラスでアニメーションを発火
-            diceEl.className = `dice-individual ${wideClass} ${resultClass} rolling`;
+            // 出目が3桁（100）の場合は文字サイズを小さくするクラスを付与
+            const textStyleClass = roll >= 100 ? 'small-text' : '';
+            
+            diceEl.className = `dice-individual ${textStyleClass} ${resultClass} rolling`;
             diceEl.innerText = roll;
             cubesDiv.appendChild(diceEl);
         });
 
-        // ② 合計値の表示
         const totalDiv = document.getElementById('dice-total');
         totalDiv.innerHTML = `合計: ${total} <span style="font-size:0.9rem; font-weight:normal; color:#888;">(${count}D${sides})</span>`;
 
-        // ③ ログ（履歴）のテキスト作成
         const time = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         let logDetails = count > 1 ? ` [${results.join(', ')}]` : '';
         const logText = `${count}D${sides} ➔ ${total}${logDetails} ${label}`;
@@ -407,7 +403,6 @@
             diceLogs.pop();
         }
 
-        // ④ ログ画面の更新
         const logList = document.getElementById('dice-log');
         logList.innerHTML = '';
 
