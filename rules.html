@@ -56,7 +56,7 @@
             position: relative;
             z-index: 1; 
         }
-        /* セクション内の小見出し（紫の点線）を大きくし、最後に肉球を追加 */
+        /* セクション内の小見出し（紫の点線） */
         h3 {
             font-size: 20px; 
             color: #6c528d;
@@ -64,12 +64,21 @@
             margin-bottom: 15px;
             border-bottom: 1px dashed #b3a2cb;
             padding-bottom: 5px;
+            position: relative; /* 肉球の配置基準用 */
+            display: inline-block; /* 文字の長さに幅を合わせる */
+            width: 100%;
         }
+        /* 末尾の文字の裏に半透明の肉球を重ねる設定 */
         h3::after {
             content: "🐾";
-            font-size: 1em; 
-            margin-left: 4px;
-            display: inline-block;
+            position: absolute;
+            right: 4px; /* 右端からの位置調整 */
+            bottom: -2px; /* 下端からの位置調整 */
+            font-size: 1.4em; /* 文字より少し大きめにしてスタンプ感を出す */
+            color: rgba(157, 129, 186, 0.25); /* 半透明の薄紫 */
+            z-index: -1; /* 文字の裏側に配置 */
+            transform: rotate(-10deg); /* ほんの少し傾けて可愛く */
+            pointer-events: none;
         }
 
         h2::after {
@@ -256,7 +265,6 @@
         <h3>日程調整について（KP依頼時）</h3>
         <p>私にKP（ゲームマスター）の依頼をする場合は、以下の手順での調整をお願いします。</p>
         
-        <!-- 手入力の数字を削除し、自動数字リストのみに整えました -->
         <ol class="schedule-list" style="font-size: 15px; line-height: 1.8;">
             <li style="margin-bottom: 12px;">まず、PL全員がいるチャンネルにて、私がシナリオに「何時間必要か」を書き出します。</li>
             <li style="margin-bottom: 12px;">それを踏まえて、PLの皆様で日程の候補日を出し合ってください。</li>
@@ -281,7 +289,7 @@
         <ul>
             <li><span class="marker-purple">応急キットの仕様：</span><br>セッションに持ち込む際、PLはシナリオ開始前に、以下の2つの効果からどちらか任意のものを選択できます。<br>➔ <strong>① 応急手当技能の判定に ＋30 のプラス補正</strong> ／ <strong>② 成功時に「3」の固定値回復</strong><br>※非常に強力なため、1回のセッションにつき卓全体での持ち込みは<strong>最大2つまで</strong>とします。</li>
             <li><span class="marker-purple">武器の持ち込みについて：</span><br>持ち込み自体は可能です。ただし、現実世界の日常で持ち歩いていて、明らかに怪しまれるもの（刃物や銃器等）は、移動時などに《隠す》技能の成功が必要です。</li>
-            <li><span class="marker-purple">空野卓の警察NPC仕様：</span><br>当卓に登場する警察はそんじゃそこらの無能警察と違い、<strong>基本的に非常に優秀</strong>です。武器を所持していて職質をされた場合、ゲーム内の《言いくるめ》技能を成功させるか、プレイヤー自身で納得のいく「リアルな言い訳」を提示する必要があります。</li>
+            <li><span class="marker-purple">空野卓の警察NPC仕様：</span><br>当卓に登場する警察はそんじゃそこらの無能警察と違い、<strong>基本 的に非常に優秀</strong>です。武器を所持していて職質をされた場合、ゲーム内の《言いくるめ》技能を成功させるか、プレイヤー自身で納得のいく「リアルな言い訳」を提示する必要があります。</li>
         </ul>
 
         <h3>成長ルール</h3>
@@ -296,7 +304,7 @@
             </tr>
             <tr>
                 <th>ファンブル</th>
-                <td>シナリオ終了後にまとめて算出。<br>ファンブルを出していた技能の成長判定を行う場合、成長しやすくなるように判定ダイスへ <span class="marker-yellow">+1</span> の補正が入ります。</td>
+                <td>シナリオ終了後にまとめて算出。<br>ファンブルを出していた技能の成長判定を行う場合、成長しやすくなるように判定ダイスへ <strong>+1</strong> の補正が入ります。</td>
             </tr>
         </table>
 
@@ -421,7 +429,7 @@
                 </tr>
                 <tr class="fumb-row">
                     <td>100</td>
-                    <td>その場で盛大にこけてしまい、<br>次の自分のターンまで<br>行動不能。</td>
+                    <td>$その場で盛大にこけてしまい、$<br>次の自分のターンまで<br>行動不能。</td>
                     <td>相手からの反撃を喰らう。<br><br>※相手は<br>攻撃判定必要。</td>
                     <td>ダメージ二倍で受ける。<br><br>敵がラウンドの最後に<br>二回目の行動をする。</td>
                     <td>3点の固定ダメージ</td>
