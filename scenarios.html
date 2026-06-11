@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>スタジオ猫 - 通過シナリオ</title>
     <style>
-        /* 全体のデザイン設定（他ページと完全統一） */
         body { 
             font-family: sans-serif; 
             background-color: #f3effa; 
@@ -18,7 +17,7 @@
         }
         .container { 
             max-width: 850px; 
-            margin: 30px auto 250px auto; /* 超巨大猫用の下部余白 */
+            margin: 30px auto 250px auto; 
             padding: 30px; 
             background: #ffffff; 
             border-radius: 12px; 
@@ -27,7 +26,6 @@
             z-index: 2; 
         }
         
-        /* ヘッダーと猫APNG */
         header { 
             text-align: center; 
             border-bottom: 2px solid #b3a2cb; 
@@ -45,13 +43,11 @@
         h1 { margin: 0; font-size: 28px; letter-spacing: 0.08em; color: #6c528d; }
         .subtitle { font-size: 14px; color: #8e7cab; margin: 5px 0 0 0; }
         
-        /* ナビゲーションメニュー */
         nav { text-align: center; margin-bottom: 20px; }
         nav a { margin: 0 8px; color: #8261ad; text-decoration: none; font-size: 14px; font-weight: bold; }
         nav a:hover { text-decoration: underline; }
         nav a.active { color: #4a148c; border-bottom: 2px solid #4a148c; padding-bottom: 2px; }
 
-        /* 見出しと巨大肉球スタンプ */
         h2 { 
             font-size: 20px; 
             border-left: 5px solid #9d81ba; 
@@ -80,7 +76,6 @@
             margin: 15px 0;
         }
 
-        /* テーブル（表）のデザイン */
         table { 
             width: 100%; 
             border-collapse: collapse; 
@@ -120,7 +115,6 @@
         td { color: #3b3543; }
         tbody tr:hover { background-color: #fbf9fe; }
 
-        /* 簡単入力フォーム・隠しログインのスタイル */
         .admin-panel {
             margin-top: 50px;
             background: #f8f6fc;
@@ -142,7 +136,6 @@
         .delete-btn { background: none; border: none; color: #aaa; cursor: pointer; font-size: 14px; padding: 0 4px; display: none; } 
         .delete-btn:hover { color: #c2185b; }
 
-        /* アニメーションの設定（歩くメガ猫） */
         .walking-cat {
             position: fixed;
             bottom: -50px; 
@@ -195,11 +188,9 @@
                 </tr>
             </thead>
             <tbody id="table-body">
-                <!-- ここにデータが展開されます -->
             </tbody>
         </table>
 
-        <!-- 初期状態では完全に隠されているログインパネル -->
         <div class="admin-panel" id="login-panel" style="display: none;">
             <div class="admin-title">🔒 管理者ログイン</div>
             <div class="form-group" style="max-width: 300px; margin-bottom: 15px;">
@@ -209,7 +200,6 @@
             <button class="submit-btn" style="max-width: 200px;" onclick="checkPassword()">ログイン🐾</button>
         </div>
 
-        <!-- ログイン成功時に出現する追加フォーム -->
         <div class="admin-panel" id="form-panel" style="display: none;">
             <div class="admin-title">🐾 通過シナリオ履歴を追加する (管理者ログイン中)</div>
             <div class="form-grid">
@@ -258,15 +248,12 @@
 <img src="cat.png" alt="歩く猫" class="walking-cat">
 
 <script>
-    // 【管理者設定】修正された新しいパスワードキー
     const ADMIN_PASSWORD_KEY = "cat0912sorano";
-    // 【隠しコマンド設定】
     const SECRET_COMMAND = "cat";
     
     let inputBuffer = "";
     let isLoggedIn = false;
 
-    // 初期データ
     const defaultScenarios = [
         { system: "クトゥルフ神話TRPG", title: "毒入りスープ", pc: "PL", type: "新規", status: "生還", note: "-" },
         { system: "新クトゥルフ神話TRPG", title: "狂気山脈", pc: "KP", type: "新規", status: "その他", note: "4回GM可能" },
@@ -277,7 +264,6 @@
     let currentSortColumn = -1;
     let isAscending = true;
 
-    // キーボード入力を監視する隠しコマンドシステム
     window.addEventListener("keydown", (e) => {
         if (isLoggedIn) return; 
 
@@ -294,7 +280,6 @@
         }
     });
 
-    // パスワードチェック関数
     function checkPassword() {
         const input = document.getElementById("admin-password").value;
         if (input === ADMIN_PASSWORD_KEY) {
@@ -308,7 +293,6 @@
         }
     }
 
-    // 保存データを読み込んで表を組み立てる関数
     function loadScenarios() {
         const saved = localStorage.getItem('cat_scenarios');
         if (saved) {
@@ -320,7 +304,6 @@
         renderTable(scenarios);
     }
 
-    // 画面の表（tbody）を描画する処理
     function renderTable(dataList) {
         const tbody = document.getElementById("table-body");
         tbody.innerHTML = "";
@@ -344,7 +327,6 @@
         });
     }
 
-    // 新しいシナリオを追加する関数
     function addScenario() {
         if (!isLoggedIn) return;
 
@@ -368,7 +350,6 @@
         resetHeaders();
     }
 
-    // シナリオを削除する関数
     function deleteScenario(index) {
         if (!isLoggedIn) return;
         
@@ -386,7 +367,6 @@
         currentSortColumn = -1;
     }
 
-    // 指定された3列のみで動くあいうえお並び替え関数
     function sortTable(columnIndex) {
         const table = document.getElementById("scenario-table");
         const headers = table.querySelectorAll("th");
