@@ -45,7 +45,7 @@
         h1 { margin: 0; font-size: 28px; letter-spacing: 0.08em; color: #6c528d; }
         .subtitle { font-size: 14px; color: #8e7cab; margin: 5px 0 0 0; }
         
-        /* 見出しと【巨大肉球スタンプ】 */
+        /* 見出しと【背面の巨大肉球スタンプ】 */
         h2 { 
             font-size: 18px; 
             border-left: 4px solid #9d81ba; 
@@ -53,16 +53,19 @@
             margin-top: 40px; 
             color: #513971; 
             position: relative;
+            z-index: 1; /* 文字の手前/後ろの重なりをコントロール */
         }
+        /* 「自己紹介」の文字の真裏に肉球を配置 */
         h2::after {
             content: "🐾";
             position: absolute;
-            right: 20px;
-            top: -25px; 
+            left: 5px;       /* 右側から「左側（文字の開始位置）」へ移動 */
+            top: -42px;      /* 文字の真後ろに重なるように高さを調整 */
             color: rgba(157, 129, 186, 0.12); 
             font-size: 80px; 
-            transform: rotate(25deg); 
+            transform: rotate(-15deg); /* 重なったときに綺麗に見えるよう逆向きに少し回転 */
             pointer-events: none;
+            z-index: -1;     /* 【重要】文字の「裏（背景）」に回り込ませる設定 */
         }
 
         /* テーブルの設定 */
@@ -81,28 +84,21 @@
         /* 5倍サイズでさらに画面下を歩く大猫APNG */
         .walking-cat {
             position: fixed;
-            bottom: -50px; /* 【重要】マイナス値にして画面の一番下にめり込ませ、文字の邪魔を限界まで減らす */
-            left: -550px; /* 大きくなった分、画面左外の深いところからスタート */
-            width: 500px; /* サイズを5倍（500px四方）に超巨大化！ */
+            bottom: -50px; 
+            left: -550px; 
+            width: 500px; 
             height: 500px;
-            z-index: 1; /* 白いコンテナの裏を歩かせる */
+            z-index: 1; 
             pointer-events: none; 
-            transform: scaleX(-1); /* 左右反転で右向き */
-            /* 40秒かけてさらにのっそりと1周させる設定 */
+            transform: scaleX(-1); 
             animation: catWalkMega 40s infinite linear;
             object-fit: contain;
         }
 
         @keyframes catWalkMega {
-            0% { 
-                left: -550px; 
-            }
-            85% { 
-                left: 100vw; /* 画面右端へ通り抜ける */
-            }
-            100% { 
-                left: 100vw; /* ループまでのインターバル */
-            }
+            0% { left: -550px; }
+            85% { left: 100vw; }
+            100% { left: 100vw; }
         }
     </style>
 </head>
