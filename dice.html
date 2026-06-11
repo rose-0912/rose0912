@@ -80,26 +80,113 @@
             margin: 15px 0;
         }
 
-        /* ダイス機能のスタイル */
+        /* 【大リニューアル】ダイス選択パネル（ステッチリボン＆肉球フレーム風） */
         .dice-panel { 
             display: flex; 
             flex-wrap: wrap; 
             gap: 15px; 
             align-items: center; 
-            background: #f8f6fc; 
-            padding: 20px; 
-            border-radius: 8px; 
-            margin-top: 15px; 
-            margin-bottom: 20px; 
+            background-color: #f5effd; 
+            background-image: radial-gradient(rgba(142, 124, 171, 0.04) 15%, transparent 16%);
+            background-size: 20px 20px; /* うっすらドット柄 */
+            padding: 24px; 
+            border-radius: 16px; 
+            margin-top: 20px; 
+            margin-bottom: 25px; 
             justify-content: center; 
-            border: 1px solid #ebdff5;
+            border: 2px dashed #d1c4e9; /* かわいい白点線ステッチ風 */
+            box-shadow: inset 0 0 10px rgba(142, 124, 171, 0.05);
+            position: relative;
         }
-        .dice-select-group { display: flex; align-items: center; gap: 8px; font-weight: bold; color: #4a148c; font-size: 15px; }
-        .dice-select-group select { padding: 6px 12px; border-radius: 4px; border: 1px solid #b39ddb; font-size: 1rem; background: #fff; color: #4a148c; cursor: pointer; }
-        .dice-btn { background: linear-gradient(135deg, #7b1fa2 0%, #4a148c 100%); color: white; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 1rem; transition: transform 0.1s, opacity 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .dice-btn:hover { opacity: 0.9; }
-        .dice-btn:active { transform: scale(0.95); }
         
+        /* ぷっくりマカロン風のフォントグループ */
+        .dice-select-group { 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 6px; 
+            font-weight: bold; 
+            color: #5c4b75; 
+            font-size: 14px; 
+            background: #ffffff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid #dfd5f0;
+            box-shadow: 0 2px 4px rgba(142, 124, 171, 0.08);
+        }
+        
+        /* ころんとした丸みのあるセレクトボックス */
+        .dice-select-group select { 
+            padding: 4px 8px; 
+            border-radius: 12px; 
+            border: 1px solid #b39ddb; 
+            font-size: 0.95rem; 
+            background: #fff; 
+            color: #4a148c; 
+            font-weight: bold;
+            cursor: pointer; 
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .dice-select-group select:hover {
+            border-color: #7b1fa2;
+        }
+        
+        /* カスタム入力ボックスの丸み調整 */
+        .dice-select-group input[type="number"] {
+            width: 52px; 
+            padding: 4px; 
+            border-radius: 12px; 
+            border: 1px solid #b39ddb; 
+            font-size: 0.95rem;
+            color: #4a148c;
+            font-weight: bold;
+            text-align: center;
+            outline: none;
+        }
+        .dice-select-group input[type="number"]:focus {
+            border-color: #7b1fa2;
+        }
+
+        /* ぷにっとマカロン風ダイスボタン */
+        .dice-btn { 
+            background: linear-gradient(135deg, #9575cd 0%, #673ab7 100%); 
+            color: white; 
+            border: none; 
+            padding: 10px 22px; 
+            border-radius: 25px; /* 丸っこく丸める */
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 1rem; 
+            letter-spacing: 0.03em;
+            transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            box-shadow: 0 4px 0 #4527a0, 0 5px 8px rgba(0,0,0,0.15); /* 立体的なお菓子風の影 */
+            position: relative;
+            top: 0;
+        }
+        .dice-btn:hover { 
+            opacity: 0.95; 
+            transform: translateY(-1px);
+            box-shadow: 0 5px 0 #4527a0, 0 6px 10px rgba(0,0,0,0.15);
+        }
+        /* 押した時にぷにっと沈み込むアニメーション */
+        .dice-btn:active { 
+            top: 4px; /* 影の分だけ下に下げる */
+            box-shadow: 0 0 0 #4527a0, 0 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        /* カスタムの「振る」ボタン用の少し小ぶりなスタイル */
+        .custom-roll-btn {
+            padding: 6px 16px !important; 
+            font-size: 0.9rem !important;
+            border-radius: 18px !important;
+            box-shadow: 0 3px 0 #4527a0, 0 4px 6px rgba(0,0,0,0.15) !important;
+        }
+        .custom-roll-btn:active {
+            top: 3px !important;
+            box-shadow: 0 0 0 #4527a0, 0 1px 2px rgba(0,0,0,0.2) !important;
+        }
+        
+        /* 結果コンテナの見た目調整 */
         .dice-result-container { min-height: 80px; background: #fafafa; border: 2px dashed #b39ddb; border-radius: 6px; padding: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 20px; }
         .dice-list { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; justify-content: center; }
         
@@ -122,7 +209,7 @@
         .total-score { font-size: 1.3rem; font-weight: bold; color: #4a148c; }
         .placeholder-text { color: #888; font-style: italic; }
 
-        /* 新設：永久集計カウンターエリアのスタイル */
+        /* 通算集計カウンターエリアのスタイル */
         .counter-panel {
             background: #fbf9fe;
             border: 1px solid #ebdff5;
@@ -131,19 +218,14 @@
             margin-bottom: 30px;
             text-align: center;
         }
-        .counter-title { font-size: 15px; font-weight: bold; color: #513971; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; gap: 5px; }
+        .counter-title { font-size: 15px; font-weight: bold; color: #513971; margin-bottom: 15px; }
         .counter-box-container { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; }
-        .counter-box { background: #fff; border: 1px solid #e1daf0; padding: 12px 20px; border-radius: 6px; box-shadow: 0 2px 6px rgba(142,124,171,0.05); min-width: 140px; }
+        .counter-box { background: #fff; border: 1px solid #e1daf0; padding: 15px 25px; border-radius: 6px; box-shadow: 0 2px 6px rgba(142,124,171,0.05); min-width: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .counter-label { font-size: 12px; font-weight: bold; color: #666; margin-bottom: 6px; }
-        .counter-value { font-size: 24px; font-weight: bold; margin-bottom: 8px; }
+        .counter-value { font-size: 26px; font-weight: bold; }
         .crit-color { color: #1565c0; }
         .fumb-color { color: #c2185b; }
         .total-color { color: #4a148c; }
-        .counter-control-btn { background: #f3effa; border: 1px solid #b3a2cb; color: #513971; font-weight: bold; border-radius: 4px; padding: 2px 10px; cursor: pointer; font-size: 14px; margin: 0 3px; transition: background 0.2s; }
-        .counter-control-btn:hover { background: #e1daf0; }
-        .counter-reset-container { margin-top: 15px; text-align: right; }
-        .reset-link { color: #888; font-size: 12px; text-decoration: underline; cursor: pointer; background: none; border: none; }
-        .reset-link:hover { color: #c2185b; }
         
         /* 履歴（ログ）用のスタイル */
         .dice-log-container { border-top: 1px dashed #c8b9dd; padding-top: 15px; text-align: left; max-width: 450px; margin: 0 auto; }
@@ -198,24 +280,26 @@
         <h2>Webダイス</h2>
         <p>簡易的なダイスシミュレーターです。個数を選択して各ダイスボタンを押してください。</p>
         
+        <!-- かわいいデザインにブラッシュアップしたダイスパネル -->
         <div class="dice-panel">
             <div class="dice-select-group">
-                <label for="dice-count">個数：</label>
+                <label for="dice-count">🐾 個数：</label>
                 <select id="dice-count">
                     <option value="1">1個</option> <option value="2">2個</option> <option value="3">3個</option>
                     <option value="4">4個</option> <option value="5">5個</option> <option value="6">6個</option>
                     <option value="7">7個</option> <option value="8">8個</option> <option value="9">9個</option> <option value="10">10個</option>
                 </select>
             </div>
+            
             <button class="dice-btn" onclick="rollDice(6)">1D6</button>
             <button class="dice-btn" onclick="rollDice(10)">1D10</button>
             <button class="dice-btn" onclick="rollDice(20)">1D20</button>
             <button class="dice-btn" onclick="rollDice(100)">1D100</button>
             
-            <div class="dice-select-group" style="margin-left: 10px;">
+            <div class="dice-select-group">
                 カスタム：
-                <input type="number" id="custom-sides" value="100" min="2" max="1000" style="width: 50px; padding: 5px; border-radius: 4px; border: 1px solid #b39ddb; text-align: center;"> 面
-                <button class="dice-btn" style="padding: 6px 12px; font-size: 0.9rem;" onclick="rollCustomDice()">振る</button>
+                <input type="number" id="custom-sides" value="100" min="2" max="1000"> <span>面 🐾</span>
+                <button class="dice-btn custom-roll-btn" onclick="rollCustomDice()">振る</button>
             </div>
         </div>
 
@@ -226,31 +310,22 @@
             <div class="total-score" id="dice-total"></div>
         </div>
 
-        <!-- 新設：永久保存型・通算クリファン集計カウンター -->
+        <!-- 通算ダイス集計カウンター -->
         <div class="counter-panel">
-            <div class="counter-title">📊 卓の通算ダイス集計カウンター (ブラウザを閉じても保存)</div>
+            <div class="counter-title">📊 あなたの通算ダイスロール集計 (ブラウザを閉じても自動保存)</div>
             <div class="counter-box-container">
                 <div class="counter-box">
                     <div class="counter-label">決定的成功 (C)</div>
                     <div class="counter-value crit-color" id="total-crit-val">0</div>
-                    <button class="counter-control-btn" onclick="adjustCounter('crit', -1)">-</button>
-                    <button class="counter-control-btn" onclick="adjustCounter('crit', 1)">+</button>
                 </div>
                 <div class="counter-box">
                     <div class="counter-label">致命的失敗 (F)</div>
                     <div class="counter-value fumb-color" id="total-fumb-val">0</div>
-                    <button class="counter-control-btn" onclick="adjustCounter('fumb', -1)">-</button>
-                    <button class="counter-control-btn" onclick="adjustCounter('fumb', 1)">+</button>
                 </div>
                 <div class="counter-box">
                     <div class="counter-label">総ダイスロール数</div>
                     <div class="counter-value total-color" id="total-rolls-val">0</div>
-                    <button class="counter-control-btn" onclick="adjustCounter('rolls', -1)">-</button>
-                    <button class="counter-control-btn" onclick="adjustCounter('rolls', 1)">+</button>
                 </div>
-            </div>
-            <div class="counter-reset-container">
-                <button class="reset-link" onclick="resetCounter()">➔ カウンターの数字をすべてリセットする</button>
             </div>
         </div>
 
@@ -268,37 +343,11 @@
 <script>
     let diceLogs = [];
 
-    // ローカルストレージ（ブラウザ永久保存）からデータを読み込む関数
+    // ローカルストレージからデータを読み込む関数
     function loadSavedCounters() {
         document.getElementById('total-crit-val').innerText = localStorage.getItem('cat_total_crit') || 0;
         document.getElementById('total-fumb-val').innerText = localStorage.getItem('cat_total_fumb') || 0;
         document.getElementById('total-rolls-val').innerText = localStorage.getItem('cat_total_rolls') || 0;
-    }
-
-    // カウンターの数値を直接手動で増減させる関数（他PLの集計用）
-    function adjustCounter(type, amount) {
-        let key = '';
-        let elementId = '';
-        if (type === 'crit') { key = 'cat_total_crit'; elementId = 'total-crit-val'; }
-        else if (type === 'fumb') { key = 'cat_total_fumb'; elementId = 'total-fumb-val'; }
-        else if (type === 'rolls') { key = 'cat_total_rolls'; elementId = 'total-rolls-val'; }
-
-        let currentVal = parseInt(localStorage.getItem(key) || 0, 10);
-        let newVal = currentVal + amount;
-        if (newVal < 0) newVal = 0; // マイナスにはならないようにガード
-
-        localStorage.setItem(key, newVal);
-        document.getElementById(elementId).innerText = newVal;
-    }
-
-    // すべてのリセット関数
-    function resetCounter() {
-        if (confirm('通算カウンターの数字をすべて「0」に戻してもよろしいですか？')) {
-            localStorage.setItem('cat_total_crit', 0);
-            localStorage.setItem('cat_total_fumb', 0);
-            localStorage.setItem('cat_total_rolls', 0);
-            loadSavedCounters();
-        }
     }
 
     function rollDice(sides) {
@@ -323,15 +372,15 @@
             }
         }
 
-        // 永久集計データの更新（自動連動システム）
+        // 永久集計データの自動更新システム
         let savedCrits = parseInt(localStorage.getItem('cat_total_crit') || 0, 10) + critCount;
         let savedFumbs = parseInt(localStorage.getItem('cat_total_fumb') || 0, 10) + fumbCount;
-        let savedRolls = parseInt(localStorage.getItem('cat_total_rolls') || 0, 10) + 1; // 1回振るボタンを押した数
+        let savedRolls = parseInt(localStorage.getItem('cat_total_rolls') || 0, 10) + count; 
 
         localStorage.setItem('cat_total_crit', savedCrits);
         localStorage.setItem('cat_total_fumb', savedFumbs);
         localStorage.setItem('cat_total_rolls', savedRolls);
-        loadSavedCounters(); // 画面の数値をリフレッシュ
+        loadSavedCounters(); 
 
         // ② サイコロ画面の生成
         const cubesDiv = document.getElementById('dice-cubes');
@@ -406,7 +455,6 @@
         rollDice(sides);
     }
 
-    // ページを起動した瞬間に保存されたカウンターデータを読み込む
     window.onload = loadSavedCounters;
 </script>
 </body>
