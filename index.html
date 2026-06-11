@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>スタジオ猫 - 自己紹介</title>
     <style>
-        /* 全体のデザイン設定（薄紫と白が基調） */
         body { 
             font-family: sans-serif; 
             background-color: #f3effa; 
@@ -24,10 +23,9 @@
             border-radius: 12px; 
             box-shadow: 0 4px 15px rgba(142, 124, 171, 0.1); 
             position: relative;
-            z-index: 2; /* 文字が猫より手前に来るように設定 */
+            z-index: 2; 
         }
         
-        /* ヘッダーと猫APNG */
         header { 
             text-align: center; 
             border-bottom: 2px solid #b3a2cb; 
@@ -45,7 +43,6 @@
         h1 { margin: 0; font-size: 28px; letter-spacing: 0.08em; color: #6c528d; }
         .subtitle { font-size: 14px; color: #8e7cab; margin: 5px 0 0 0; }
         
-        /* 見出しと巨大肉球スタンプ*/
         h2 { 
             font-size: 18px; 
             border-left: 4px solid #9d81ba; 
@@ -55,33 +52,28 @@
             position: relative;
             z-index: 1; 
         }
-        /* 肉球の位置を「自」の文字の真裏（中心）へ微調整 */
         h2::after {
             content: "🐾";
             position: absolute;
-            left: -22px;     /* 「自」の中心に合うように左へ少しずらす */
-            top: -55px;      /* さらに上へ引き上げ */
+            left: -22px;     
+            top: -55px;     
             color: rgba(157, 129, 186, 0.12); 
             font-size: 80px; 
             transform: rotate(-15deg); 
             pointer-events: none;
-            z-index: -1;     /* 文字の裏に回り込ませる */
+            z-index: -1;    
         }
 
-        /* テーブルの設定 */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { border: 1px solid #e1daf0; padding: 12px; text-align: left; font-size: 14px; }
         th { background-color: #fbf9fe; color: #513971; width: 30%; }
         
-        /* 他のページに飛ぶナビゲーションメニュー */
         nav { text-align: center; margin-bottom: 20px; }
         nav a { margin: 0 8px; color: #8261ad; text-decoration: none; font-size: 14px; font-weight: bold; }
         nav a:hover { text-decoration: underline; }
         nav a.active { color: #4a148c; border-bottom: 2px solid #4a148c; padding-bottom: 2px; }
 
-        /* ─── アニメーションの設定 ─── */
 
-        /* 5倍サイズでさらに画面下を歩く大猫APNG */
         .walking-cat {
             position: fixed;
             bottom: -50px; 
