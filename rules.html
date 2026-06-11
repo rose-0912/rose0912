@@ -56,15 +56,22 @@
             position: relative;
             z-index: 1; 
         }
-        /* セクション内の小見出し */
+        /* セクション内の小見出し（紫の点線）を大きくし、最後に肉球を追加 */
         h3 {
-            font-size: 16px;
+            font-size: 20px; /* 文字を大きく変更 */
             color: #6c528d;
             margin-top: 35px;
             margin-bottom: 15px;
             border-bottom: 1px dashed #b3a2cb;
             padding-bottom: 5px;
         }
+        h3::after {
+            content: "🐾";
+            font-size: 1em; /* 文字と同じサイズ */
+            margin-left: 4px;
+            display: inline-block;
+        }
+
         h2::after {
             content: "🐾";
             position: absolute;
@@ -92,10 +99,17 @@
             font-size: 15px; 
             line-height: 1.8; 
         }
-        /* 【改善】重要な文字のマーカー色を紫から薄黄色に変更して見やすく */
+        
+        /* 重要な文字のマーカー（基本は黄色） */
         li strong, p strong { 
             color: #222; 
             background: linear-gradient(transparent 50%, #fff9c4 50%); 
+            padding: 0 2px;
+        }
+        /* 最初（秘匿シナリオ時など）の紫マーカー用のクラス */
+        .marker-purple {
+            color: #222;
+            background: linear-gradient(transparent 50%, #e1daf0 50%) !important;
             padding: 0 2px;
         }
         
@@ -116,8 +130,11 @@
         nav a:hover { text-decoration: underline; }
         nav a.active { color: #4a148c; border-bottom: 2px solid #4a148c; padding-bottom: 2px; }
 
-        /* バッジ */
+        /* バッジのカラー指定 */
         .badge { display: inline-block; padding: 2px 8px; font-size: 12px; font-weight: bold; border-radius: 4px; color: white; margin-right: 5px; }
+        .bg-cf { background-color: #8e7cab; } /* CFチケット：紫 */
+        .bg-c { background-color: #1565c0; }  /* Cチケット：青 */
+        .bg-f { background-color: #c2185b; }  /* Fチケット：赤 */
         .bg-tag { background-color: #9d81ba; }
         .bg-alert { background-color: #c2185b; }
 
@@ -216,10 +233,11 @@
         
         <h3>基本ルール・チケット制</h3>
         <ul>
-            <li><strong>秘匿シナリオ時：</strong><br>他の方のCS（キャラクターシート）はネタバレを含む可能性がありますので、<strong>絶対に見ないよう</strong>にお願いします。</li>
-            <li><span class="badge bg-alert">CFチケット</span><br>KPがどうしても処理に困ったり、「ここでクリファンが起こると卓の進行上マズい！」という緊急時に使用します。</li>
-            <li><span class="badge bg-tag">Cチケット</span><br>基本的にSANC（正気度ロール）や、あらかじめシナリオ内で回数が明記されている場合を除き、<strong>すべてのダイスの振り直し</strong>を可能とします。</li>
-            <li><span class="badge bg-tag">Fチケット</span><br>基本的にシナリオ終了後、悪いことを溜め込んだ罰として<strong>【所持枚数 × 1d3】のSAN値が確定で消失</strong>します。</li>
+            <!-- 最初のここだけ紫色のマーカーに変更 -->
+            <li><strong class="marker-purple">秘匿シナリオ時：</strong><br>他の方のCS（キャラクターシート）はネタバレを含む可能性がありますので、<strong class="marker-purple">絶対に見ないよう</strong>にお願いします。</li>
+            <li><span class="badge bg-cf">CFチケット</span><br>KPがどうしても処理に困ったり、「ここでクリファンが起こると卓の進行上マズい！」という緊急時に使用します。</li>
+            <li><span class="badge bg-c">Cチケット</span><br>基本的にSANC（正気度ロール）や、あらかじめシナリオ内で回数が明記されている場合を除き、<strong>すべてのダイスの振り直し</strong>を可能とします。</li>
+            <li><span class="badge bg-f">Fチケット</span><br>基本的にシナリオ終了後、悪いことを溜め込んだ罰として<strong>【所持枚数 × 1d3】のSAN値が確定で消失</strong>します。</li>
             <li><strong>相殺ルール：</strong><br>溜まってしまったFチケットは、Cチケット（またはセッション中に出した通常クリティカル）を差し出すことで、<strong>相殺（消費して帳消しに）</strong>することが可能です。</li>
         </ul>
 
@@ -255,15 +273,15 @@
         <table>
             <tr>
                 <th style="width: 25%;">初期値成功</th>
-                <td>その場で即時 <strong>1d10</strong> の技能成長。それ以降（セッション終了後など）は通常のクリティカル成功と同一 of 処理を行います。</td>
+                <td>その場で即時 <strong>1d10</strong> の技能成長。<br>それ以降（セッション終了後など）は、通常のクリティカル成功と同一の処理を行います。</td>
             </tr>
             <tr>
                 <th>クリティカル</th>
-                <td>シナリオ終了後にまとめて算出。<strong>【判定：1d10ロール】</strong>成長ロール成功で1、失敗した場合は <strong>1d5</strong> ポイント成長します。</td>
+                <td>シナリオ終了後にまとめて算出。<br><strong>【判定：1d10ロール】</strong>成長ロール成功で1、失敗した場合は <strong>1d5</strong> ポイント成長します。</td>
             </tr>
             <tr>
                 <th>ファンブル</th>
-                <td>シナリオ終了後にまとめて算出。ファンブルを出していた技能の成長判定を行う場合、成長しやすくなるように判定ダイスへ <strong>+1</strong> の補正が入ります。</td>
+                <td>シナリオ終了後にまとめて算出。<br>ファンブルを出していた技能の成長判定を行う場合、成長しやすくなるように判定ダイスへ <strong>+1</strong> の補正が入ります。</td>
             </tr>
         </table>
 
@@ -288,7 +306,7 @@
             <summary>▼ 一時的発狂表 《1D10＋4ラウンド》【クリックで開閉】</summary>
             <ol>
                 <li><strong>異常性癖：</strong>狂気的な光景を見すぎて新たな性的趣向に目覚める。性癖対象が近くにある間、あらゆる探索技能に -50 のデバフ。</li>
-                <li><strong>恐怖喪失：</strong>狂気が解除されるまで、SANチェックによるSAN減少が一時的に一切発生しなくなる。その代わり、チェックを跨ぐたびに出た数値分、クトゥルフ神話技能が強制成長する。</li>
+                <li><strong>恐怖喪失：</strong>狂気が解除されるまで、SANチェックによるSAN減少が一時的に一切発生しなくなる。その代わり、チェックを跨ぐたびに出た数値分、クトゥルフ神話技能が強制成長する.</li>
                 <li><strong>強迫観念：</strong>異常に行動的になり慎重さを欠く。目に見える危険地帯にまで率先して進んでしまう。【目星】【聞き耳】-50。</li>
                 <li><strong>自己主義：</strong>自分以外の存在に対して極めて冷酷になる。保身のためなら仲間を蹴落とすことも躊躇わなくなる。【信用】-100。</li>
                 <li><strong>短絡的思考：</strong>思考が刹那的になり後先考えなくなる。使ったことがない怪しい道具をすぐ使ったり、謎のボタンを押しに行きたくなる。【アイデア】その他探索技能-10。</li>
@@ -350,7 +368,7 @@
             <li><strong>貫通ルール（基本P.36）：</strong>当卓ではスペシャル判定を適用しておらず、ダイス処理の簡略化のため不採用。</li>
             <li><strong>ライフル・ショットガンでの受け流し（2010 P.29）：</strong>受け流しの度に武器の耐久値を確認するのが煩雑な点、およびサプリ記載の「同じラウンドに攻撃不可」の処理を失念しやすいため不採用。</li>
             <li><strong>武器による命中率の変動（基本P.72）：</strong>同一技能でも武器の種類で命中が変わるルールは、武器知見が少ないため不採用。</li>
-            <li><strong>自動火器の連射ルール（基本P.68）：</strong>命中率の上昇や弾数計算の処理が複雑化するため不採用。</li>
+            <li><strong>自動火器の連射ルール（基本P.68）：</strong>命中率の上昇や弾数計算 of 処理が複雑化するため不採用。</li>
         </ul>
 
         <h3>戦闘におけるクリティカル/ファンブルについて</h3>
@@ -367,30 +385,30 @@
             <tbody>
                 <tr class="crit-row">
                     <td>1</td>
-                    <td>戦闘技能まですべてが自動成功となる。</td>
-                    <td>ダメージ二倍 及び 回避不可</td>
-                    <td>任意選択 カウンター（通常ダメ） 回避/nの値が1回復</td>
-                    <td>6の固定回復 or 1d10の回復</td>
+                    <td>戦闘技能まですべてが<br>自動成功となる。</td>
+                    <td>ダメージ二倍<br>及び 回避不可</td>
+                    <td>任意選択：<br>カウンター（通常ダメ）<br>または 回避/nの値が1回復</td>
+                    <td>6の固定回復<br>or 1d10の回復</td>
                 </tr>
                 <tr class="crit-row" style="background-color: #f7faff;">
                     <td>2〜5</td>
-                    <td>即時で戦闘に映れたとしてDEX判定が不要。そのDEX判定でCした場合、戦闘技能が自動成功。</td>
-                    <td>ダメージ二倍 回避不可 どちらか一方をダイスで選択する。</td>
-                    <td>ダイス選択 カウンター（半ダメ） 回避/nの値が1回復</td>
-                    <td>3固定回復 or 1d6の回復</td>
+                    <td>即時で戦闘に移れたとして<br>DEX判定が不要。<br><br>そのDEX判定でCした場合、<br>戦闘技能が自動成功。</td>
+                    <td>ダメージ二倍、<br>または 回避不可。<br><br>どちらか一方を<br>ダイスで選択する。</td>
+                    <td>ダイス選択：<br>カウンター（半ダメ）<br>または 回避/nの値が1回復</td>
+                    <td>3固定回復<br>or 1d6の回復</td>
                 </tr>
                 <tr class="fumb-row" style="background-color: #fffafb;">
                     <td>95〜99</td>
-                    <td>その場でつまづいてしまいHP1の減少。</td>
-                    <td>1d味方人数でランダム攻撃。2回以上攻撃の場合他攻撃の成功判定を失敗に押し下げる。</td>
-                    <td>ダメージ二倍で攻撃を受ける。</td>
+                    <td>その場でつまづいてしまい、<br>HP1の減少。</td>
+                    <td>1d味方人数で<br>ランダム攻撃。<br><br>2回以上攻撃の場合、<br>他攻撃の成功判定を<br>失敗に押し下げる。</td>
+                    <td>ダメージ二倍で<br>攻撃を受ける。</td>
                     <td>1d3のダメージ</td>
                 </tr>
                 <tr class="fumb-row">
                     <td>100</td>
-                    <td>その場で盛大にこけてしまい、次の自分のターンまで行動不能。</td>
-                    <td>相手からの反撃を喰らう。相手は攻撃判定が必要。</td>
-                    <td>ダメージ二倍で受ける。敵がラウンドの最後に二回目の行動をする。</td>
+                    <td>その場で盛大にこけてしまい、<br>次の自分のターンまで<br>行動不能。</td>
+                    <td>相手からの反撃を喰らう。<br><br>※相手は<br>攻撃判定が必要。</td>
+                    <td>ダメージ二倍で受ける。<br><br>敵がラウンドの最後に<br>二回目の行動をする。</td>
                     <td>3点の固定ダメージ</td>
                 </tr>
             </tbody>
