@@ -5,176 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>スタジオ猫 - 回せるシナリオ</title>
     <style>
-        body { 
-            font-family: sans-serif; 
-            background-color: #f3effa; 
-            color: #3b3543; 
-            margin: 0; 
-            padding: 0; 
-            position: relative;
-            overflow-x: hidden; 
-            min-height: 100vh;
-        }
-        .container { 
-            max-width: 850px; 
-            margin: 30px auto 250px auto; 
-            padding: 30px; 
-            background: #ffffff; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 15px rgba(142, 124, 171, 0.1); 
-            position: relative;
-            z-index: 2; 
-        }
-        
-        header { 
-            text-align: center; 
-            border-bottom: 2px solid #b3a2cb; 
-            padding-bottom: 20px; 
-            margin-bottom: 30px; 
-            position: relative;
-        }
-        .header-cat {
-            display: block;
-            width: 45px;
-            height: 45px;
-            margin: 0 auto 5px auto;
-            object-fit: contain;
-        }
-        h1 { margin: 0; font-size: 28px; letter-spacing: 0.08em; color: #6c528d; }
+        body { font-family: sans-serif; background-color: #f3effa; color: #3b3543; margin: 0; padding: 0; min-height: 100vh; }
+        .container { max-width: 850px; margin: 30px auto; padding: 30px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(142, 124, 171, 0.1); }
+        header { text-align: center; border-bottom: 2px solid #b3a2cb; padding-bottom: 20px; margin-bottom: 30px; }
+        .header-cat { display: block; width: 45px; height: 45px; margin: 0 auto 5px auto; object-fit: contain; }
+        h1 { margin: 0; font-size: 28px; color: #6c528d; }
         .subtitle { font-size: 14px; color: #8e7cab; margin: 5px 0 0 0; }
-        
         nav { text-align: center; margin-bottom: 20px; }
         nav a { margin: 0 8px; color: #8261ad; text-decoration: none; font-size: 14px; font-weight: bold; }
-        nav a:hover { text-decoration: underline; }
-        nav a.active { color: #4a148c; border-bottom: 2px solid #4a148c; padding-bottom: 2px; }
-
-        h2 { 
-            font-size: 20px; 
-            border-left: 5px solid #9d81ba; 
-            padding-left: 12px; 
-            margin-top: 40px; 
-            margin-bottom: 20px;
-            color: #513971; 
-            position: relative; 
-            z-index: 1; 
-        }
-        h2::after {
-            content: "🐾";
-            position: absolute;
-            left: -22px;     
-            top: -55px;      
-            color: rgba(157, 129, 186, 0.12); 
-            font-size: 80px; 
-            transform: rotate(-15deg); 
-            pointer-events: none;
-            z-index: -1;     
-        }
-
-        p {
-            font-size: 15px;
-            line-height: 1.8;
-            margin: 15px 0;
-        }
-
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin-top: 15px; 
-            margin-bottom: 30px; 
-        }
-        th, td { 
-            border: 1px solid #e1daf0; 
-            padding: 12px 10px; 
-            text-align: left; 
-            font-size: 14px; 
-            line-height: 1.5; 
-        }
-        th { 
-            background-color: #fbf9fe; 
-            color: #513971; 
-            font-weight: bold; 
-            user-select: none;
-            white-space: nowrap;
-        }
-        th.sortable {
-            cursor: pointer;
-            position: relative;
-        }
-        th.sortable:hover {
-            background-color: #f3effa;
-        }
-        th.sortable::after {
-            content: " ↕";
-            font-size: 11px;
-            color: #b3a2cb;
-            margin-left: 4px;
-        }
-        th.sort-asc::after { content: " 🐾↑"; color: #4a148c; }
-        th.sort-desc::after { content: " 🐾↓"; color: #4a148c; }
-
-        td { color: #3b3543; }
-        td a { color: #8261ad; text-decoration: none; font-weight: bold; }
-        td a:hover { text-decoration: underline; color: #4a148c; }
-        tbody tr:hover { background-color: #fbf9fe; }
-
-        .badge {
-            display: inline-block;
-            padding: 2px 8px;
-            font-size: 11px;
-            font-weight: bold;
-            border-radius: 4px;
-            color: white;
-            white-space: nowrap;
-        }
+        nav a.active { color: #4a148c; border-bottom: 2px solid #4a148c; }
+        h2 { font-size: 20px; border-left: 5px solid #9d81ba; padding-left: 12px; margin-top: 40px; color: #513971; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #e1daf0; padding: 12px 10px; font-size: 14px; }
+        th { background-color: #fbf9fe; color: #513971; }
+        .badge { display: inline-block; padding: 2px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; color: white; }
         .bg-coc6 { background-color: #6c528d; }
         .bg-coc7 { background-color: #8e7cab; }
         .bg-emo { background-color: #d81b60; }
         .bg-other { background-color: #9d81ba; }
-
-        .admin-panel {
-            margin-top: 50px;
-            background: #f8f6fc;
-            border: 2px dashed #d1c4e9;
-            border-radius: 12px;
-            padding: 20px;
-        }
-        .admin-title { font-size: 15px; font-weight: bold; color: #513971; margin-bottom: 15px; display: flex; align-items: center; gap: 5px; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
-        .form-group { display: flex; flex-direction: column; gap: 5px; }
-        .form-group label { font-size: 12px; font-weight: bold; color: #666; }
-        .form-group input, .form-group select { padding: 8px; border-radius: 6px; border: 1px solid #b39ddb; outline: none; font-size: 14px; background: #fff; color: #3b3543; }
-        .form-group input:focus, .form-group select:focus { border-color: #7b1fa2; }
-
-        .submit-btn { background: linear-gradient(135deg, #9575cd 0%, #673ab7 100%); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 14px; width: 100%; box-shadow: 0 3px 0 #4527a0; transition: transform 0.1s; }
-        .submit-btn:active { transform: scale(0.98); box-shadow: none; position: relative; top: 3px; }
-        
-        .delete-btn { background: none; border: none; color: #aaa; cursor: pointer; font-size: 14px; padding: 0 4px; display: none; } 
-        .delete-btn:hover { color: #c2185b; }
-
-        .walking-cat {
-            position: fixed;
-            bottom: -50px; 
-            left: -550px; 
-            width: 500px; 
-            height: 500px;
-            z-index: 1; 
-            pointer-events: none; 
-            transform: scaleX(-1); 
-            animation: catWalkMega 40s infinite linear;
-            object-fit: contain;
-        }
-        @keyframes catWalkMega {
-            0% { left: -550px; }
-            85% { left: 100vw; }
-            100% { left: 100vw; }
-        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <img src="cat.png" alt="猫" class="header-cat">
         <h1>スタジオ猫</h1>
         <p class="subtitle">TRPG Profile & Tools</p>
     </header>
@@ -183,264 +37,61 @@
         <a href="index.html">自己紹介</a> | 
         <a href="rules.html">ハウスルール</a> | 
         <a href="scenarios.html">通過シナリオ</a> | 
-        <a href="owned-scenarios.html" class="active">回せるシナリオ</a> | 
-        <a href="dice.html">Webダイス</a>
+        <a href="owned-scenarios.html" class="active">回せるシナリオ</a>
     </nav>
     
     <section>
         <h2>KP/GM可能シナリオ一覧</h2>
         <p>いつでもGMのお誘いお待ちしております！日程や人数はご相談ください。</p>
-        <p style="font-size: 13px; color: #8e7cab; margin-bottom: 5px;">※見出し（システム、シナリオ名など）をクリックすると、並び替えができます。</p>
-        
         <table id="owned-table">
             <thead>
                 <tr>
-                    <th class="sortable" onclick="sortTable(0)" style="width: 22%;">システム</th>
-                    <th class="sortable" onclick="sortTable(1)" style="width: 43%;">シナリオ名</th>
-                    <th class="sortable" onclick="sortTable(2)" style="width: 15%;">人数</th>
-                    <th class="sortable" onclick="sortTable(3)" style="width: 20%;">目安時間</th>
+                    <th>システム</th>
+                    <th>シナリオ名</th>
+                    <th>人数</th>
+                    <th>目安時間</th>
                 </tr>
             </thead>
             <tbody id="table-body">
+                <tr><td colspan="4" style="text-align:center;">読み込み中...🐾</td></tr>
             </tbody>
         </table>
-
-        <div class="admin-panel" id="login-panel" style="display: none;">
-            <div class="admin-title">🔒 管理者ログイン</div>
-            <div class="form-group" style="max-width: 300px; margin-bottom: 15px;">
-                <label>パスワードキー</label>
-                <input type="password" id="admin-password" placeholder="パスワードを入力してください">
-            </div>
-            <button class="submit-btn" style="max-width: 200px;" onclick="checkPassword()">ログイン🐾</button>
-        </div>
-
-        <div class="admin-panel" id="form-panel" style="display: none;">
-            <div class="admin-title">🐾 回せるシナリオ履歴を追加する (管理者ログイン中)</div>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>システム</label>
-                    <select id="form-system">
-                        <option value="クトゥルフ神話TRPG">クトゥルフ神話TRPG (6版)</option>
-                        <option value="新クトゥルフ神話TRPG">新クトゥルフ神話TRPG (7版)</option>
-                        <option value="エモクロアTRPG">エモクロアTRPG</option>
-                        <option value="その他">その他</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>シナリオ名</label>
-                    <input type="text" id="form-title" placeholder="例：狂気山脈 〜邪神の嶺〜">
-                </div>
-                <div class="form-group">
-                    <label>シナリオ名のフリガナ（任意）</label>
-                    <input type="text" id="form-kana" placeholder="ひらがな、カタカナ、または英名義">
-                </div>
-                <div class="form-group">
-                    <label>人数</label>
-                    <input type="text" id="form-players" placeholder="例：3〜4人 / 1人(タイマン)">
-                </div>
-                <div class="form-group">
-                    <label>目安時間</label>
-                    <input type="text" id="form-time" placeholder="例：ボイセ 6〜8時間">
-                </div>
-                <div class="form-group">
-                    <label>シナリオURL（任意）</label>
-                    <input type="url" id="form-url" placeholder="例：https://booth.pm/...">
-                </div>
-            </div>
-            <button class="submit-btn" onclick="addScenario()">回せるリストに追加する 🐾</button>
-        </div>
     </section>
 </div>
 
-<img src="cat.png" alt="歩く猫" class="walking-cat">
-
 <script>
-    const ADMIN_PASSWORD_KEY = "cat0912sorano";
-    const SECRET_COMMAND = "cat";
-    
-    let inputBuffer = "";
-    let isLoggedIn = false;
+    // ★ここに取得したウェブアプリのURLを貼り付けてください
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbw8dK9X0XPCuzfBgh2Fg901u4zotBDWmiWjn9s0mPjIkc0l2qdOUGDcyXDQDET7IR4/exec";
 
-    const defaultOwnedScenarios = [
-        { system: "クトゥルフ神話TRPG", title: "狂気山脈 〜邪神の嶺〜", kana: "きょうきさんみゃく", players: "3〜4人", time: "ボイセ 6〜8時間", url: "https://booth.pm/" },
-        { system: "クトゥルフ神話TRPG", title: "毒入りスープ", kana: "どくいりすーぷ", players: "1〜3人", time: "ボイセ 2時間", url: "" },
-        { system: "エモクロアTRPG", title: "新世界より", kana: "しんせかいより", players: "1人（タイマン）", time: "ボイセ 3時間", url: "" },
-        { system: "その他", title: "あいうえおシナリオ", kana: "あいうえお", players: "1人", time: "1時間", url: "" },
-        { system: "その他", title: "アイウエオシナリオ", kana: "アイウエオ", players: "1人", time: "1時間", url: "" },
-        { system: "その他", title: "Cat Day", kana: "Cat Day", players: "2人", time: "3時間", url: "" }
-    ];
+    async function loadScenarios() {
+        try {
+            const response = await fetch(GAS_URL);
+            const data = await response.json();
+            const tbody = document.getElementById("table-body");
+            tbody.innerHTML = "";
 
-    let ownedScenarios = [];
-    let currentSortColumn = -1;
-    let isAscending = true;
-
-    // キーボード入力を監視する隠しコマンドシステム
-    window.addEventListener("keydown", (e) => {
-        if (isLoggedIn) return; 
-        inputBuffer += e.key.toLowerCase();
-        if (inputBuffer.length > SECRET_COMMAND.length) {
-            inputBuffer = inputBuffer.substring(inputBuffer.length - SECRET_COMMAND.length);
-        }
-        if (inputBuffer === SECRET_COMMAND) {
-            document.getElementById("login-panel").style.display = "block";
-            document.getElementById("login-panel").scrollIntoView({ behavior: 'smooth' }); 
-            inputBuffer = ""; 
-        }
-    });
-
-    function checkPassword() {
-        const input = document.getElementById("admin-password").value;
-        if (input === ADMIN_PASSWORD_KEY) {
-            isLoggedIn = true;
-            document.getElementById("login-panel").style.display = "none";
-            document.getElementById("form-panel").style.display = "block";
-            renderTable(ownedScenarios); 
-            alert("認証成功！編集モードに移行します🐾");
-        } else {
-            alert("パスワードが違います、持ち主専用です🐾");
+            data.forEach(item => {
+                const row = document.createElement("tr");
+                const titleDisplay = item.url ? `<a href="${item.url}" target="_blank">${item.title} 🔗</a>` : item.title;
+                
+                row.innerHTML = `
+                    <td>${getSystemBadge(item.system)}</td>
+                    <td>${titleDisplay}</td>
+                    <td>${item.players}</td>
+                    <td>${item.time}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        } catch (e) {
+            document.getElementById("table-body").innerHTML = "<tr><td colspan='4'>読み込みエラーが発生しました🐾</td></tr>";
         }
     }
 
-    function loadScenarios() {
-        const saved = localStorage.getItem('cat_owned_scenarios');
-        if (saved) {
-            ownedScenarios = JSON.parse(saved);
-        } else {
-            ownedScenarios = defaultOwnedScenarios;
-            localStorage.setItem('cat_owned_scenarios', JSON.stringify(ownedScenarios));
-        }
-        renderTable(ownedScenarios);
-    }
-
-    function getSystemBadge(systemName) {
-        if (systemName === "クトゥルフ神話TRPG") return `<span class="badge bg-coc6">CoC6版</span>`;
-        if (systemName === "新クトゥルフ神話TRPG") return `<span class="badge bg-coc7">CoC7版</span>`;
-        if (systemName === "エモクロアTRPG") return `<span class="badge bg-emo">エモクロア</span>`;
+    function getSystemBadge(system) {
+        if (system === "クトゥルフ神話TRPG") return `<span class="badge bg-coc6">CoC6版</span>`;
+        if (system === "新クトゥルフ神話TRPG") return `<span class="badge bg-coc7">CoC7版</span>`;
+        if (system === "エモクロアTRPG") return `<span class="badge bg-emo">エモクロア</span>`;
         return `<span class="badge bg-other">その他</span>`;
-    }
-
-    function renderTable(dataList) {
-        const tbody = document.getElementById("table-body");
-        tbody.innerHTML = "";
-
-        dataList.forEach((item, index) => {
-            const row = document.createElement("tr");
-            const deleteBtnStyle = isLoggedIn ? "display: inline-block;" : "display: none;";
-
-            const titleDisplay = item.url 
-                ? `<a href="${item.url}" target="_blank" rel="noopener noreferrer">${item.title} 🔗</a>` 
-                : item.title;
-
-            row.innerHTML = `
-                <td>${getSystemBadge(item.system)}</td>
-                <td>${titleDisplay}</td>
-                <td>${item.players}</td>
-                <td style="display:flex; justify-content:space-between; align-items:center; gap:5px; border:none; padding:12px 10px;">
-                    <span>${item.time}</span>
-                    <button class="delete-btn" style="${deleteBtnStyle}" onclick="deleteScenario(${index})" title="削除">❌</button>
-                </td>
-            `;
-            tbody.appendChild(row);
-        });
-    }
-
-    function addScenario() {
-        if (!isLoggedIn) return;
-
-        const system = document.getElementById("form-system").value;
-        const title = document.getElementById("form-title").value.trim();
-        let kana = document.getElementById("form-kana").value.trim();
-        const players = document.getElementById("form-players").value.trim() || "-";
-        const time = document.getElementById("form-time").value.trim() || "-";
-        const url = document.getElementById("form-url").value.trim();
-
-        if (!title) { alert("シナリオ名は必ず入力してくださいね🐾"); return; }
-        if (!kana) { kana = title; } 
-
-        ownedScenarios.push({ system, title, kana, players, time, url });
-        localStorage.setItem('cat_owned_scenarios', JSON.stringify(ownedScenarios));
-        
-        document.getElementById("form-title").value = "";
-        document.getElementById("form-kana").value = "";
-        document.getElementById("form-players").value = "";
-        document.getElementById("form-time").value = "";
-        document.getElementById("form-url").value = "";
-
-        renderTable(ownedScenarios);
-        resetHeaders();
-    }
-
-    function deleteScenario(index) {
-        if (!isLoggedIn) return;
-        if (confirm("このシナリオをリストから削除しても大丈夫ですか？🐾")) {
-            ownedScenarios.splice(index, 1);
-            localStorage.setItem('cat_owned_scenarios', JSON.stringify(ownedScenarios));
-            renderTable(ownedScenarios);
-            resetHeaders();
-        }
-    }
-
-    function resetHeaders() {
-        const headers = document.querySelectorAll("#owned-table th");
-        headers.forEach(th => th.classList.remove("sort-asc", "sort-desc"));
-        currentSortColumn = -1;
-    }
-
-
-    function getCharGroupScore(str) {
-        if (!str) return 5;
-        const char = str.charAt(0);
-        
-        if (char.match(/^[\u3040-\u309F]/)) return 1; // ひらがな
-        if (char.match(/^[\u30A0-\u30FF]/)) return 2; // カタカナ
-        if (char.match(/^[\u4E00-\u9FFF]/)) return 3; // 漢字
-        if (char.match(/^[a-zA-Zａ-ｚoriginalA-Z]/)) return 4; // 英語・アルファベット
-        return 5;
-    }
-
-    function sortTable(columnIndex) {
-        const table = document.getElementById("owned-table");
-        const headers = table.querySelectorAll("th");
-
-        if (currentSortColumn === columnIndex) {
-            isAscending = !isAscending;
-        } else {
-            isAscending = true;
-            currentSortColumn = columnIndex;
-        }
-
-        headers.forEach((th, idx) => {
-            th.classList.remove("sort-asc", "sort-desc");
-            if (idx === columnIndex) {
-                th.classList.add(isAscending ? "sort-asc" : "sort-desc");
-            }
-        });
-
-        const sorted = [...ownedScenarios].sort((a, b) => {
-            let valA = (columnIndex === 1) ? a.kana : a[["system", "", "players", "time"][columnIndex]];
-            let valB = (columnIndex === 1) ? b.kana : b[["system", "", "players", "time"][columnIndex]];
-
-            valA = valA.trim();
-            valB = valB.trim();
-
-            if (valA === "-" || valA === "") return 1;
-            if (valB === "-" || valB === "") return -1;
-
-            if (columnIndex === 1) {
-                const groupA = getCharGroupScore(valA);
-                const groupB = getCharGroupScore(valB);
-
-                if (groupA !== groupB) {
-                    return isAscending ? groupA - groupB : groupB - groupA;
-                }
-            }
-
-            return isAscending 
-                ? valA.localeCompare(valB, 'ja') 
-                : valB.localeCompare(valA, 'ja');
-        });
-
-        renderTable(sorted);
     }
 
     window.onload = loadScenarios;
