@@ -5,30 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>スタジオ猫 - 回せるシナリオ</title>
     <style>
-        body { font-family: sans-serif; background-color: #f3effa; color: #3b3543; margin: 0; padding: 0; min-height: 100vh; }
-        .container { max-width: 850px; margin: 30px auto; padding: 30px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(142, 124, 171, 0.1); }
+        body { font-family: sans-serif; background-color: #f3effa; color: #3b3543; margin: 0; padding: 0; position: relative; overflow-x: hidden; min-height: 100vh; }
+        .container { max-width: 850px; margin: 30px auto 250px auto; padding: 30px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(142, 124, 171, 0.1); position: relative; z-index: 2; }
         header { text-align: center; border-bottom: 2px solid #b3a2cb; padding-bottom: 20px; margin-bottom: 30px; }
         .header-cat { display: block; width: 45px; height: 45px; margin: 0 auto 5px auto; object-fit: contain; }
-        h1 { margin: 0; font-size: 28px; color: #6c528d; }
+        h1 { margin: 0; font-size: 28px; letter-spacing: 0.08em; color: #6c528d; }
         .subtitle { font-size: 14px; color: #8e7cab; margin: 5px 0 0 0; }
         nav { text-align: center; margin-bottom: 20px; }
         nav a { margin: 0 8px; color: #8261ad; text-decoration: none; font-size: 14px; font-weight: bold; }
-        nav a.active { color: #4a148c; border-bottom: 2px solid #4a148c; }
-        h2 { font-size: 20px; border-left: 5px solid #9d81ba; padding-left: 12px; margin-top: 40px; color: #513971; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { border: 1px solid #e1daf0; padding: 12px 10px; font-size: 14px; }
-        th { background-color: #fbf9fe; color: #513971; }
-        .badge { display: inline-block; padding: 2px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; color: white; }
+        nav a.active { color: #4a148c; border-bottom: 2px solid #4a148c; padding-bottom: 2px; }
+        h2 { font-size: 20px; border-left: 5px solid #9d81ba; padding-left: 12px; margin-top: 40px; margin-bottom: 20px; color: #513971; position: relative; z-index: 1; }
+        h2::after { content: "🐾"; position: absolute; left: -22px; top: -55px; color: rgba(157, 129, 186, 0.12); font-size: 80px; transform: rotate(-15deg); pointer-events: none; z-index: -1; }
+        p { font-size: 15px; line-height: 1.8; margin: 15px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 30px; }
+        th, td { border: 1px solid #e1daf0; padding: 12px 10px; text-align: left; font-size: 14px; line-height: 1.5; }
+        th { background-color: #fbf9fe; color: #513971; font-weight: bold; white-space: nowrap; }
+        .badge { display: inline-block; padding: 2px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; color: white; white-space: nowrap; }
         .bg-coc6 { background-color: #6c528d; }
         .bg-coc7 { background-color: #8e7cab; }
         .bg-emo { background-color: #d81b60; }
         .bg-other { background-color: #9d81ba; }
+        .walking-cat { position: fixed; bottom: -50px; left: -550px; width: 500px; height: 500px; z-index: 1; pointer-events: none; transform: scaleX(-1); animation: catWalkMega 40s infinite linear; object-fit: contain; }
+        @keyframes catWalkMega { 0% { left: -550px; } 85% { left: 100vw; } 100% { left: 100vw; } }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
+        <img src="cat.png" alt="猫" class="header-cat">
         <h1>スタジオ猫</h1>
         <p class="subtitle">TRPG Profile & Tools</p>
     </header>
@@ -37,7 +42,8 @@
         <a href="index.html">自己紹介</a> | 
         <a href="rules.html">ハウスルール</a> | 
         <a href="scenarios.html">通過シナリオ</a> | 
-        <a href="owned-scenarios.html" class="active">回せるシナリオ</a>
+        <a href="owned-scenarios.html" class="active">回せるシナリオ</a> | 
+        <a href="dice.html">Webダイス</a>
     </nav>
     
     <section>
@@ -46,10 +52,10 @@
         <table id="owned-table">
             <thead>
                 <tr>
-                    <th>システム</th>
-                    <th>シナリオ名</th>
-                    <th>人数</th>
-                    <th>目安時間</th>
+                    <th style="width: 22%;">システム</th>
+                    <th style="width: 43%;">シナリオ名</th>
+                    <th style="width: 15%;">人数</th>
+                    <th style="width: 20%;">目安時間</th>
                 </tr>
             </thead>
             <tbody id="table-body">
@@ -58,6 +64,8 @@
         </table>
     </section>
 </div>
+
+<img src="cat.png" alt="歩く猫" class="walking-cat">
 
 <script>
     // ★ここに取得したウェブアプリのURLを貼り付けてください
@@ -72,7 +80,7 @@
 
             data.forEach(item => {
                 const row = document.createElement("tr");
-                const titleDisplay = item.url ? `<a href="${item.url}" target="_blank">${item.title} 🔗</a>` : item.title;
+                const titleDisplay = item.url ? `<a href="${item.url}" target="_blank" style="color: #8261ad; text-decoration: none; font-weight: bold;">${item.title} 🔗</a>` : item.title;
                 
                 row.innerHTML = `
                     <td>${getSystemBadge(item.system)}</td>
@@ -87,10 +95,10 @@
         }
     }
 
-    function getSystemBadge(system) {
-        if (system === "クトゥルフ神話TRPG") return `<span class="badge bg-coc6">CoC6版</span>`;
-        if (system === "新クトゥルフ神話TRPG") return `<span class="badge bg-coc7">CoC7版</span>`;
-        if (system === "エモクロアTRPG") return `<span class="badge bg-emo">エモクロア</span>`;
+    function getSystemBadge(systemName) {
+        if (systemName === "クトゥルフ神話TRPG") return `<span class="badge bg-coc6">CoC6版</span>`;
+        if (systemName === "新クトゥルフ神話TRPG") return `<span class="badge bg-coc7">CoC7版</span>`;
+        if (systemName === "エモクロアTRPG") return `<span class="badge bg-emo">エモクロア</span>`;
         return `<span class="badge bg-other">その他</span>`;
     }
 
