@@ -68,41 +68,52 @@
 <img src="cat.png" alt="歩く猫" class="walking-cat">
 
 <script>
-// ★URLはそのまま（末尾に ?callback=callback を自動で付与します）
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwRLq0u48wt7jpTvrc7QsPO8kwva2GFwWrvTuNz1Kqe3AbLf6N2zd97BtgJKDVBed1_/exec";
+    // ★あなたのGASのウェブアプリURLをここに貼る
+    const GAS_URL = "ここにURLをペースト";
 
-function loadScenarios() {
-    const script = document.createElement('script');
-    script.src = `${GAS_URL}?callback=callback`;
-    document.body.appendChild(script);
-}
-
-// データを受け取る関数（GASから呼び出される）
-function callback(data) {
-    const tbody = document.getElementById("table-body");
-    tbody.innerHTML = "";
-    
-    data.forEach(item => {
-        const row = document.createElement("tr");
-        const titleDisplay = item.url ? `<a href="${item.url}" target="_blank">${item.title} 🔗</a>` : item.title;
-        
-        row.innerHTML = `
-            <td>${getSystemBadge(item.system)}</td>
-            <td>${titleDisplay}</td>
-            <td>${item.players}</td>
-            <td>${item.time}</td>
-        `;
-        tbody.appendChild(row);
-    });
-}
-
-    function getSystemBadge(systemName) {
-        if (systemName === "クトゥルフ神話TRPG") return `<span class="badge bg-coc6">CoC6版</span>`;
-        if (systemName === "新クトゥルフ神話TRPG") return `<span class="badge bg-coc7">CoC7版</span>`;
-        if (systemName === "エモクロアTRPG") return `<span class="badge bg-emo">エモクロア</span>`;
-        return `<span class="badge bg-other">その他</span>`;
+    // データ読み込み用関数
+    function loadScenarios() {
+        const script = document.createElement('script');
+        script.src = `${GAS_URL}?callback=callback`;
+        document.body.appendChild(script);
     }
 
+    // データを受け取って表示するメイン関数
+    function callback(data) {
+        const tbody = document.getElementById("table-body");
+        tbody.innerHTML = "";
+        
+        data.forEach(item => {
+            const row = document.createElement("tr");
+            
+            // リンクのデザイン調整
+            const titleDisplay = item.url 
+                ? `<a href="${item.url}" target="_blank" style="color: #8261ad; text-decoration: none; font-weight: bold; border-bottom: 1px dotted #8261ad;">${item.title} 🔗</a>` 
+                : item.title;
+            
+            row.innerHTML = `
+                <td>${getSystemBadge(item.system)}</td>
+                <td>${titleDisplay}</td>
+                <td>${item.players}</td>
+                <td>${item.time}</td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    // システム名判定関数
+    function getSystemBadge(systemName) {
+        if (!systemName) return `<span class="badge bg-other">-</span>`;
+        const name = String(systemName).trim().toUpperCase();
+        
+        if (name === "COC6") return `<span class="badge bg-coc6">CoC6版</span>`;
+        if (name === "COC7") return `<span class="badge bg-coc7">CoC7版</span>`;
+        if (name === "エモクロア") return `<span class="badge bg-emo">エモクロア</span>`;
+        
+        return `<span class="badge bg-other">${systemName}</span>`;
+    }
+
+    // ページ読み込み時に実行
     window.onload = loadScenarios;
 </script>
 
