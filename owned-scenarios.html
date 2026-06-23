@@ -68,32 +68,33 @@
 <img src="cat.png" alt="歩く猫" class="walking-cat">
 
 <script>
-    // ★ここに取得したウェブアプリのURLを貼り付けてください
-    const GAS_URL = "https://script.google.com/macros/s/AKfycby0pOJvFUgaA0SGo3XoMseccWs2sXWr32LYBunz4rNV7qW-zMTOjNznOvv2zwB4L340/exec";
+// ★URLはそのまま（末尾に ?callback=callback を自動で付与します）
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwRLq0u48wt7jpTvrc7QsPO8kwva2GFwWrvTuNz1Kqe3AbLf6N2zd97BtgJKDVBed1_/exec";
 
-    async function loadScenarios() {
-        try {
-            const response = await fetch(GAS_URL);
-            const data = await response.json();
-            const tbody = document.getElementById("table-body");
-            tbody.innerHTML = "";
+function loadScenarios() {
+    const script = document.createElement('script');
+    script.src = `${GAS_URL}?callback=callback`;
+    document.body.appendChild(script);
+}
 
-            data.forEach(item => {
-                const row = document.createElement("tr");
-                const titleDisplay = item.url ? `<a href="${item.url}" target="_blank" style="color: #8261ad; text-decoration: none; font-weight: bold;">${item.title} 🔗</a>` : item.title;
-                
-                row.innerHTML = `
-                    <td>${getSystemBadge(item.system)}</td>
-                    <td>${titleDisplay}</td>
-                    <td>${item.players}</td>
-                    <td>${item.time}</td>
-                `;
-                tbody.appendChild(row);
-            });
-        } catch (e) {
-            document.getElementById("table-body").innerHTML = "<tr><td colspan='4'>読み込みエラーが発生しました🐾</td></tr>";
-        }
-    }
+// データを受け取る関数（GASから呼び出される）
+function callback(data) {
+    const tbody = document.getElementById("table-body");
+    tbody.innerHTML = "";
+    
+    data.forEach(item => {
+        const row = document.createElement("tr");
+        const titleDisplay = item.url ? `<a href="${item.url}" target="_blank">${item.title} 🔗</a>` : item.title;
+        
+        row.innerHTML = `
+            <td>${getSystemBadge(item.system)}</td>
+            <td>${titleDisplay}</td>
+            <td>${item.players}</td>
+            <td>${item.time}</td>
+        `;
+        tbody.appendChild(row);
+    });
+}
 
     function getSystemBadge(systemName) {
         if (systemName === "クトゥルフ神話TRPG") return `<span class="badge bg-coc6">CoC6版</span>`;
