@@ -20,6 +20,14 @@
         table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 30px; }
         th, td { border: 1px solid #e1daf0; padding: 12px 10px; text-align: left; font-size: 14px; line-height: 1.5; }
         th { background-color: #fbf9fe; color: #513971; font-weight: bold; white-space: nowrap; }
+        
+        /* バッジのデザイン */
+        .badge { display: inline-block; padding: 3px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; color: white; white-space: nowrap; }
+        .bg-coc6 { background-color: #6c528d; }
+        .bg-coc7 { background-color: #8e7cab; }
+        .bg-emo { background-color: #d81b60; }
+        .bg-other { background-color: #9d81ba; }
+        
         .walking-cat { position: fixed; bottom: -50px; left: -550px; width: 500px; height: 500px; z-index: 1; pointer-events: none; transform: scaleX(-1); animation: catWalkMega 40s infinite linear; object-fit: contain; }
         @keyframes catWalkMega { 0% { left: -550px; } 85% { left: 100vw; } 100% { left: 100vw; } }
     </style>
@@ -46,12 +54,12 @@
         <table id="scenario-table">
             <thead>
                 <tr>
-                    <th style="width: 25%;">システム</th>
-                    <th style="width: 25%;">シナリオ名</th>
-                    <th style="width: 13%;">PC</th>
-                    <th style="width: 12%;">新規継続</th>
-                    <th style="width: 12%;">生還ロスト</th>
-                    <th style="width: 13%;">備考</th>
+                    <th>システム</th>
+                    <th>シナリオ名</th>
+                    <th>PC</th>
+                    <th>新規継続</th>
+                    <th>生還ロスト</th>
+                    <th>備考</th>
                 </tr>
             </thead>
             <tbody id="table-body">
@@ -65,7 +73,7 @@
 
 <script>
     // ★ここに取得したウェブアプリのURLを貼り付けてください
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbyr5n9d3cqPDPgm6QKIQRb8CG2DYW1--uxAGvuQ_CcF0nw4Df3Xra3AG-F10HvHuxJo/exec";
+    const GAS_URL = "ここにURLをペースト";
 
     function loadScenarios() {
         const script = document.createElement('script');
@@ -73,21 +81,21 @@
         document.body.appendChild(script);
     }
 
-function callback(data) {
+    function callback(data) {
         const tbody = document.getElementById("table-body");
         tbody.innerHTML = "";
         
         data.forEach(item => {
             const row = document.createElement("tr");
             
-            // 備考がURL形式かどうか判定して、リンクを可愛く表示する
+            // 備考のキャラシリンク判定
             let noteDisplay = item.note || '-';
             if (item.note && item.note.startsWith('http')) {
                 noteDisplay = `<a href="${item.note}" target="_blank" style="color: #8261ad; text-decoration: none; font-weight: bold;">🔗キャラシ</a>`;
             }
 
             row.innerHTML = `
-                <td>${item.system || '-'}</td>
+                <td>${getSystemBadge(item.system)}</td>
                 <td>${item.title || '-'}</td>
                 <td>${item.pc || '-'}</td>
                 <td>${item.type || '-'}</td>
@@ -96,6 +104,17 @@ function callback(data) {
             `;
             tbody.appendChild(row);
         });
+    }
+
+    function getSystemBadge(systemName) {
+        if (!systemName) return "-";
+        const name = String(systemName).trim().toUpperCase();
+        
+        if (name === "COC6") return `<span class="badge bg-coc6">CoC6版</span>`;
+        if (name === "COC7") return `<span class="badge bg-coc7">CoC7版</span>`;
+        if (name === "エモクロア") return `<span class="badge bg-emo">エモクロア</span>`;
+        
+        return `<span class="badge bg-other">${systemName}</span>`;
     }
 
     window.onload = loadScenarios;
