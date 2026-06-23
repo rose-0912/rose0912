@@ -73,19 +73,26 @@
         document.body.appendChild(script);
     }
 
-    function callback(data) {
+function callback(data) {
         const tbody = document.getElementById("table-body");
         tbody.innerHTML = "";
         
         data.forEach(item => {
             const row = document.createElement("tr");
+            
+            // 備考がURL形式かどうか判定して、リンクを可愛く表示する
+            let noteDisplay = item.note || '-';
+            if (item.note && item.note.startsWith('http')) {
+                noteDisplay = `<a href="${item.note}" target="_blank" style="color: #8261ad; text-decoration: none; font-weight: bold;">🔗キャラシ</a>`;
+            }
+
             row.innerHTML = `
                 <td>${item.system || '-'}</td>
                 <td>${item.title || '-'}</td>
                 <td>${item.pc || '-'}</td>
                 <td>${item.type || '-'}</td>
                 <td>${item.status || '-'}</td>
-                <td>${item.note || '-'}</td>
+                <td>${noteDisplay}</td>
             `;
             tbody.appendChild(row);
         });
